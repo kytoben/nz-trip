@@ -5,6 +5,7 @@ cfg=open('/tmp/claude-0/web/config.json').read().strip() if len(sys.argv)<2 else
 def R(a,b):
     global s
     assert s.count(a)==1,a[:70]; s=s.replace(a,b)
+R('景点按天上色，白色方块是住宿、取车和机场。点任意一个点即可导航。','景点按天上色，黑色方块是住宿、取车和机场。右上角可切换街道图和卫星图。')
 R('renderNav(); render(); connect();','window.__boot = () => { renderNav(); render(); connect(); };')
 R('db = await (window.claude?.use ? window.claude.use("db") : null);','db = window.__fbdb || null;')
 R('登录同一个 Claude 账号，在电脑和手机上打开这个页面，看到的是同一份数据。','电脑和手机用同一个邮箱和口令解锁，看到的是同一份数据。</div><div class="row" style="margin-top:8px"><button type="button" class="btn sm ghost" id="logout-btn">在这台设备上退出</button>')
@@ -72,6 +73,9 @@ head='<!doctype html>\n<html lang="zh-CN"><head><meta charset="utf-8"><meta name
 # split head part (title/meta/style) from body
 i=s.index('</style>')+len('</style>')
 headpart, body = s[:i], s[i:]
+rm_js=open('/tmp/claude-0/web/realmap.js').read(); rm_css=open('/tmp/claude-0/web/realmap.css').read()
+head+='<link rel="stylesheet" href="leaflet.css"><script src="leaflet.js"></script>'
+body=body.replace('window.__boot = () => {', rm_js+'\nwindow.__boot = () => {',1)+'<style>'+rm_css+'</style>'
 out=head+headpart+'</head><body style="margin:0">'+'<div id="app-root" hidden>'+body+'</div>'+lock+'</body></html>'
 open('/tmp/claude-0/web/site/index.html','w').write(out)
 print(len(out))
