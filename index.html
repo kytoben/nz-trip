@@ -1,0 +1,1386 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="旅行手帐"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><title>新西兰旅行手帐</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#f5f5f7">
+<style>
+/* Layout: quiet product-page look. Frosted top nav on desktop, frosted tab bar on phone; one centered 980px column of soft white tiles on pale grey. */
+:root{
+  --bg:#f5f5f7; --surface:#ffffff; --sunk:#f0f0f2; --line:#e3e3e8; --hair:rgba(0,0,0,.08);
+  --ink:#1d1d1f; --muted:#6e6e73; --faint:#86868b;
+  --fern:#0071e3; --fern-ink:#ffffff; --fern-soft:#e8f1fc; --link:#0066cc;
+  --glacier:#0071e3; --sea:#dfe9f3; --land:#fbfbfd; --land-line:#c9d3dc;
+  --ember:#bf4800; --danger:#e30000; --ok:#1a9a55; --mkb:#1d1d1f; --mkb-ink:#ffffff;
+  --glass:rgba(251,251,253,.78); --scrim:rgba(0,0,0,.32);
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 6px 24px rgba(0,0,0,.05);
+  --display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r:18px; --ease:cubic-bezier(.25,.1,.25,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#000000; --surface:#161617; --sunk:#232325; --line:#2e2e31; --hair:rgba(255,255,255,.1);
+  --ink:#f5f5f7; --muted:#a1a1a6; --faint:#86868b;
+  --fern:#2997ff; --fern-ink:#ffffff; --fern-soft:#0f2a45; --link:#2997ff;
+  --glacier:#2997ff; --sea:#0d1a26; --land:#1f1f21; --land-line:#3a3a3d;
+  --ember:#ff9f0a; --danger:#ff453a; --ok:#30d158; --mkb:#f5f5f7; --mkb-ink:#1d1d1f;
+  --glass:rgba(22,22,23,.78); --scrim:rgba(0,0,0,.55);
+  --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#000000; --surface:#161617; --sunk:#232325; --line:#2e2e31; --hair:rgba(255,255,255,.1);
+  --ink:#f5f5f7; --muted:#a1a1a6; --faint:#86868b;
+  --fern:#2997ff; --fern-ink:#ffffff; --fern-soft:#0f2a45; --link:#2997ff;
+  --glacier:#2997ff; --sea:#0d1a26; --land:#1f1f21; --land-line:#3a3a3d;
+  --ember:#ff9f0a; --danger:#ff453a; --ok:#30d158; --mkb:#f5f5f7; --mkb-ink:#1d1d1f;
+  --glass:rgba(22,22,23,.78); --scrim:rgba(0,0,0,.55);
+  --shadow:0 1px 2px rgba(0,0,0,.4); color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;letter-spacing:-.011em;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--fern);outline-offset:2px;border-radius:6px}
+svg{display:block;flex:none}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:45;background:var(--glass)}
+
+/* top nav (desktop) */
+.app{min-height:100%}
+nav.side{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;height:52px;display:flex;align-items:center;gap:2px;background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--hair);padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px))}
+nav.side>*{flex:none}
+.brand{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;margin-right:18px}
+.brand svg{width:20px;height:20px;color:var(--ink)}
+.navbtn{display:flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:980px;border:0;background:none;cursor:pointer;color:var(--muted);font-size:14px;transition:color .2s var(--ease),background .2s var(--ease)}
+nav.side .navbtn svg{display:none}
+.navbtn:hover{color:var(--ink)}
+.navbtn[aria-current="page"]{color:var(--ink);font-weight:600;background:var(--sunk)}
+.side .spacer{flex:1}
+.sync{font-size:12px;color:var(--faint);display:flex;gap:6px;align-items:center;padding:0 6px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--faint);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--ember)}
+nav.side [data-act="settings"] svg{display:block;width:17px;height:17px}
+
+main{min-width:0;padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px));padding-block:44px 80px}
+.wrap{max-width:980px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+
+/* type */
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 20px;margin-bottom:8px}
+header.top>div:first-child{min-width:0;flex:1 1 auto}
+header.top .acts-top{display:flex;gap:8px;align-items:center;flex:none}
+h1{font-family:var(--display);font-size:48px;line-height:1.08;letter-spacing:-.03em;margin:2px 0 0;font-weight:700;text-wrap:balance}
+h2{font-family:var(--display);font-size:24px;line-height:1.2;letter-spacing:-.02em;margin:0;font-weight:700}
+h3{font-size:17px;line-height:1.35;margin:0;font-weight:600;letter-spacing:-.015em}
+header.top .sub{font-size:17px;color:var(--muted);margin-top:8px;line-height:1.45}
+.sub{color:var(--muted);font-size:14px}
+.eyebrow{font-size:14px;color:var(--muted);font-weight:600;letter-spacing:-.01em}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.num{font-variant-numeric:tabular-nums}
+.empty{color:var(--faint);font-size:15px;padding:6px 0}
+
+/* controls */
+.btn{border:0;background:var(--sunk);color:var(--ink);border-radius:980px;height:36px;padding:0 16px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:500;white-space:nowrap;text-decoration:none;transition:background .2s var(--ease),opacity .2s var(--ease),transform .2s var(--ease)}
+.btn:hover{text-decoration:none;filter:brightness(.97)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--fern);color:var(--fern-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:none;color:var(--link)}
+.btn.ghost:hover{background:var(--sunk)}
+.btn.sm{height:32px;padding:0 14px;font-size:14px}
+.btn.danger{color:var(--danger)}
+.btn svg{width:15px;height:15px}
+.iconbtn{border:0;background:none;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--link);padding:0;transition:background .2s var(--ease)}
+.iconbtn:hover{background:var(--sunk);text-decoration:none}
+.iconbtn svg{width:18px;height:18px}
+.card{background:var(--surface);border-radius:var(--r);padding:22px 24px;box-shadow:var(--shadow)}
+.banner{background:var(--surface);border-radius:var(--r);padding:14px 20px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-size:14px;color:var(--muted);box-shadow:var(--shadow)}
+.banner .btn{background:none;color:var(--link);padding:0;height:auto}
+.pill{display:inline-flex;align-items:center;font-size:12px;line-height:20px;padding:0 9px;border-radius:980px;background:var(--sunk);color:var(--muted);white-space:nowrap;font-weight:500}
+.code{font-family:var(--mono);font-size:13px;line-height:20px;background:var(--sunk);color:var(--ink);padding:0 8px;border-radius:6px;cursor:pointer;border:0;display:inline-block}
+.code:hover{background:var(--fern-soft);color:var(--fern)}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{border:0;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);border-radius:980px;height:34px;padding:0 15px;font-size:14px;cursor:pointer;white-space:nowrap;display:inline-flex;gap:7px;align-items:center;flex:none;transition:background .2s var(--ease),color .2s var(--ease)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);box-shadow:none}
+.chip i{width:8px;height:8px;border-radius:50%;display:block}
+
+/* home */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;padding:28px 30px}
+.hero .eyebrow{color:var(--muted);font-weight:500}
+.hero .nb{font-family:var(--display);font-weight:600;font-size:24px;letter-spacing:-.02em;margin-top:4px;line-height:1.25}
+.count{font-family:var(--display);font-size:64px;line-height:1;font-weight:700;letter-spacing:-.04em;color:var(--ink)}
+.countwrap{text-align:right}
+.countwrap .sub{margin-top:4px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.stat{background:var(--surface);border-radius:var(--r);padding:20px 22px;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:var(--display);font-size:32px;line-height:1.1;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted);display:block;margin-top:4px}
+
+/* days */
+.day{background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.dayhead{display:flex;gap:14px;align-items:center;padding:20px 24px 14px}
+.daynum{font-family:var(--display);font-weight:600;font-size:15px;line-height:1;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#ffffff;flex:none}
+.dayhead .grow{flex:1;min-width:0}
+.dayhead h3{font-size:19px;letter-spacing:-.02em}
+.daytheme{border:0;background:none;padding:0;cursor:pointer;color:var(--muted);font-size:14px;text-align:left;display:block}
+.daytheme:hover{color:var(--link)}
+.daytheme.add{color:var(--link)}
+.items{list-style:none;margin:0;padding:0 0 4px}
+.it{display:grid;grid-template-columns:52px 24px minmax(0,1fr) auto;gap:10px;align-items:start;padding:12px 16px 12px 24px;cursor:pointer;line-height:1.45;transition:background .15s var(--ease)}
+.it+.it{box-shadow:inset 0 1px 0 var(--line);box-shadow:none;border-top:1px solid var(--line);margin-left:24px;padding-left:0;grid-template-columns:52px 24px minmax(0,1fr) auto}
+.it:hover{background:var(--sunk)}
+.it.static{cursor:default}.it.static:hover{background:none}
+.it .t{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;line-height:24px}
+.it .ic{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--sunk);color:var(--muted)}
+.it .ic svg{width:14px;height:14px}
+.it .ic.booked{background:var(--fern-soft);color:var(--fern)}
+.it .ic.ht{color:var(--fern)}
+.it .main{min-width:0}
+.it .name{font-weight:600;overflow-wrap:anywhere;line-height:24px;font-size:16px;letter-spacing:-.015em}
+.it .meta{font-size:13px;color:var(--muted);overflow-wrap:anywhere;line-height:1.55}
+.it .meta .code{margin-left:2px}
+.it.done .name{text-decoration:line-through;color:var(--faint)}
+.it .acts{display:flex;gap:0;margin-top:-5px}
+.night{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:8px;padding:12px 24px;border-top:1px solid var(--line);margin-top:4px}
+.night svg{width:15px;height:15px;color:var(--ember)}
+.dayfoot{display:flex;gap:8px;padding:6px 20px 20px;flex-wrap:wrap;align-items:center}
+
+/* bookings */
+.bk-list{display:flex;flex-direction:column;gap:14px}
+.bk{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:16px;align-items:start}
+.bk .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--fern-soft);color:var(--fern)}
+.bk .ic svg{width:22px;height:22px}
+.bk h3{font-size:19px;letter-spacing:-.02em}
+.bk .when{font-variant-numeric:tabular-nums;font-size:14px;color:var(--ink);margin-top:2px}
+.bk .acts{display:flex;flex-direction:column;gap:2px;margin:-4px -8px 0 0}
+
+/* map */
+.mapbox{position:relative;border-radius:var(--r);overflow:hidden;background:var(--sea);height:min(64vh,600px);touch-action:none;user-select:none;box-shadow:var(--shadow)}
+.mapbox svg{width:100%;height:100%;cursor:grab}
+.mapbox svg.drag{cursor:grabbing}
+.mapctl{position:absolute;right:14px;top:14px;display:flex;flex-direction:column;background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.mapctl button{width:40px;height:40px;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:var(--ink)}
+.mapctl button+button{border-top:1px solid var(--hair)}
+.mapctl button:hover{background:var(--sunk)}
+.mapctl svg{width:17px;height:17px}
+.maplegend{position:absolute;left:14px;bottom:14px;font-size:12px;color:var(--muted);background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);padding:6px 12px;border-radius:980px}
+.land{fill:var(--land);stroke:var(--land-line);vector-effect:non-scaling-stroke;stroke-width:1}
+.route{fill:none;stroke-width:3;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;opacity:.75}
+.mk{cursor:pointer}
+.mk circle,.mk rect{stroke:var(--land);vector-effect:non-scaling-stroke;stroke-width:2}
+.mklabel{fill:var(--ink);paint-order:stroke;stroke:var(--land);stroke-width:3px;font-family:var(--body);font-weight:600;pointer-events:none}
+.mk text.n.b{fill:var(--mkb-ink)}
+.mk text.n{fill:#ffffff;stroke:none;font-weight:600;font-family:var(--display);pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.pinfo{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center}
+.pinfo .eyebrow{color:var(--muted);font-weight:500;font-size:13px}
+.plist{display:flex;flex-direction:column}
+.plist button.p{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:12px;align-items:center;border:0;background:none;text-align:left;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;line-height:1.4;font-size:15px}
+.plist button.p:first-child{border-top:0}
+.plist button.p:hover span:nth-child(2){color:var(--link)}
+.plist .bub{width:24px;height:24px;border-radius:50%;color:#ffffff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;line-height:1;font-family:var(--display)}
+
+/* budget */
+.big{font-family:var(--display);font-size:40px;font-weight:700;letter-spacing:-.035em;line-height:1.1;color:var(--ink)}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar{display:grid;grid-template-columns:76px minmax(0,1fr) 110px;gap:14px;align-items:center;font-size:14px}
+.bar .track{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.bar .fill{height:100%;background:var(--fern);border-radius:99px}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.meter{height:8px;background:var(--sunk);border-radius:99px;overflow:hidden;margin-top:18px}
+.meter div{height:100%;background:var(--fern);border-radius:99px}
+.meter div.over{background:var(--danger)}
+.xlist{list-style:none;margin:0;padding:0}
+.xrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;align-items:center}
+.xrow:first-child,.xday+.xrow{border-top:0}
+.xrow:hover .tt{color:var(--link)}
+.xrow .tt{font-weight:500;overflow-wrap:anywhere}
+.xrow .mm{font-size:13px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:2px}
+.xrow .amt{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.xrow .amt small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.xday{font-size:13px;font-weight:600;color:var(--muted);padding:18px 0 2px}
+.xlist .xday:first-child{padding-top:6px}
+
+/* packing */
+.pk-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.pk label{display:flex;gap:12px;align-items:center;padding:9px 0;cursor:pointer;border-top:1px solid var(--line)}
+.pk h3+span+label,.pk .row+label{border-top:0}
+.pk label input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--faint);margin:0;flex:none;display:grid;place-items:center;cursor:pointer;transition:background .2s var(--ease),border-color .2s var(--ease)}
+.pk label input:checked{background:var(--fern);border-color:var(--fern)}
+.pk label input:checked::after{content:"";width:6px;height:11px;border:solid #ffffff;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.pk label.on span{text-decoration:line-through;color:var(--faint)}
+.pk label span{flex:1;min-width:0;overflow-wrap:anywhere}
+.pk .x{opacity:0;color:var(--faint);font-size:18px;transition:opacity .2s var(--ease)}
+.pk label:hover .x{opacity:1}
+.pk .row{margin-bottom:6px}
+.pkadd{display:flex;gap:10px;flex-wrap:nowrap;align-items:center}
+.pkadd input{flex:1 1 100px;min-width:0;border:0;background:var(--sunk);border-radius:12px;height:40px;padding:0 14px}
+.pkadd select{border:0;background:var(--sunk);border-radius:12px;height:40px;padding:0 10px;flex:none}
+.pkadd .btn{height:40px}
+
+/* info */
+.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.info-grid .card .eyebrow{color:var(--muted);font-weight:500}
+.info-grid .card p{margin:8px 0 0;font-size:15px}
+.info-grid ul{margin:10px 0 0;padding-left:18px;font-size:15px;color:var(--ink)}
+.info-grid li+li{margin-top:6px}
+.info-grid h3{font-size:19px}
+#cv-nzd{border:0;background:var(--sunk);border-radius:12px;height:40px;padding:0 12px;width:110px}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:var(--scrim);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;animation:fade .2s var(--ease)}
+.sheet{background:var(--surface);border-radius:22px;width:min(580px,100%);max-height:calc(100% - 24px);overflow:auto;padding:24px 24px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:rise .28s var(--ease)}
+.sheet h2{font-size:24px}
+.sheet .iconbtn{color:var(--muted);background:var(--sunk);width:30px;height:30px;font-size:18px}
+@keyframes fade{from{opacity:0}}
+@keyframes rise{from{transform:translateY(16px);opacity:0}}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 14px}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.f.full{grid-column:1/-1}
+.f label{font-size:13px;color:var(--muted);font-weight:500}
+.f input,.f select,.f textarea{border:1px solid transparent;background:var(--sunk);border-radius:12px;height:44px;padding:0 14px;width:100%;min-width:0;transition:border-color .2s var(--ease),background .2s var(--ease)}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--fern);background:var(--surface)}
+.f textarea{min-height:84px;padding:10px 14px;resize:vertical;height:auto}
+.f .money{display:flex;gap:8px}
+.f .money input{flex:1 1 auto;width:auto}
+.f .money select{flex:none;width:auto}
+.f .check{display:flex;gap:10px;align-items:center;font-size:15px;color:var(--ink);font-weight:400;cursor:pointer}
+.f .check input{width:20px;height:20px;accent-color:var(--fern);padding:0}
+.geo{display:flex;gap:8px;align-items:center}
+.geo input{flex:1}
+.hint{font-size:12px;color:var(--muted)}
+.hint.err{color:var(--danger)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:980px;font-size:14px;z-index:60;max-width:calc(100% - 32px);box-shadow:0 8px 30px rgba(0,0,0,.2);animation:rise .25s var(--ease)}
+nav.bottom{display:none}
+.mobile-only{display:none!important}
+@media (max-width:820px){
+  nav.side{display:none}
+  body::before{background:var(--bg)}
+  main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px calc(100px + env(safe-area-inset-bottom,0px))}
+  .wrap{gap:14px}
+  nav.bottom{display:grid;grid-template-columns:repeat(6,1fr);position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--hair);padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px))}
+  nav.bottom .navbtn{flex-direction:column;gap:3px;height:auto;font-size:10.5px;padding:4px 0;justify-content:center;align-items:center;text-align:center;border-radius:10px;color:var(--faint);background:none}
+  nav.bottom .navbtn svg{width:24px;height:24px}
+  nav.bottom .navbtn[aria-current="page"]{color:var(--fern);background:none;font-weight:600}
+  header.top{flex-wrap:wrap;gap:6px}
+  header.top>div:first-child{flex-basis:100%}
+  header.top .acts-top{order:-1;width:100%;justify-content:flex-end;min-height:36px}
+  h1{font-size:34px}
+  header.top .sub{font-size:15px;margin-top:6px}
+  .card{padding:18px 18px}
+  .hero{padding:22px 20px;gap:14px}
+  .hero .nb{font-size:19px}
+  .count{font-size:48px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .stat{padding:16px 18px}
+  .stat b{font-size:26px}
+  .pk-groups,.info-grid{grid-template-columns:1fr;gap:14px}
+  .form{grid-template-columns:1fr}
+  .dayhead{padding:16px 16px 10px;gap:12px}
+  .it{grid-template-columns:42px 24px minmax(0,1fr) auto;padding:11px 8px 11px 16px;gap:8px}
+  .it+.it{margin-left:16px;padding-left:0;grid-template-columns:42px 24px minmax(0,1fr) auto}
+  .it .acts .desk{display:none}
+  .night{padding:12px 16px}
+  .dayfoot{padding:4px 12px 16px}
+  .bk{grid-template-columns:40px minmax(0,1fr) auto;gap:12px}
+  .bk .ic{width:40px;height:40px}
+  .bk h3{font-size:17px}
+  .bar{grid-template-columns:62px minmax(0,1fr) 96px;gap:10px}
+  .big{font-size:34px}
+  .scrim{align-items:flex-end;padding:0}
+  .sheet{border-radius:22px 22px 0 0;max-height:94%;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px))}
+  .mobile-hide{display:none}
+  .mobile-only{display:flex!important}
+  .mapbox{height:min(58vh,520px)}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ===== immersive layer ===== */
+:root{ --stage-floor:#f5f5f7; --grad-a:#1d1d1f; --grad-b:#5e5ce6; }
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){ --stage-floor:#000000; --grad-a:#f5f5f7; --grad-b:#8e8cff; }}
+:root[data-theme="dark"]{ --stage-floor:#000000; --grad-a:#f5f5f7; --grad-b:#8e8cff; }
+html,body{overflow-x:clip}
+h1{background:linear-gradient(100deg,var(--grad-a) 35%,var(--grad-b));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;padding-bottom:.06em}
+.grad{background:linear-gradient(100deg,var(--grad-a) 30%,var(--grad-b));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:22px}
+.sec-head h2{font-size:32px;letter-spacing:-.03em}
+.more{font-size:15px;white-space:nowrap}
+.stage{position:relative;margin-top:-44px;margin-inline:calc(50% - 50vw);width:100vw;overflow:hidden;color:#f5f5f7;background:linear-gradient(180deg,#03050b 0%,#07122a 38%,#0d2a3f 70%,#12384a 100%);isolation:isolate}
+.sky{position:absolute;inset:0;z-index:-1}
+.aur{position:absolute;border-radius:50%;opacity:.5;will-change:transform;pointer-events:none}
+.a1{width:60vw;height:38vw;left:-10vw;top:6%;background:radial-gradient(closest-side,#2ee6a6,transparent);animation:drift1 22s ease-in-out infinite alternate}
+.a2{width:50vw;height:34vw;right:-8vw;top:0;background:radial-gradient(closest-side,#5a7dff,transparent);animation:drift2 26s ease-in-out infinite alternate}
+.a3{width:44vw;height:30vw;left:30vw;top:24%;background:radial-gradient(closest-side,#b35cff,transparent);opacity:.35;animation:drift1 30s ease-in-out infinite alternate-reverse}
+@keyframes drift1{to{transform:translate(8vw,4vw) scale(1.15)}}
+@keyframes drift2{to{transform:translate(-10vw,6vw) scale(1.1)}}
+.stars{position:absolute;inset:0 0 35% 0;opacity:.8}
+.ridge{position:absolute;left:0;width:100%;bottom:0;height:26%;z-index:0;will-change:transform}
+.ridge.r2{height:15%;bottom:-1px}
+.stage-in{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:40px max(22px,env(safe-area-inset-right,0px)) 210px max(22px,env(safe-area-inset-left,0px));will-change:transform,opacity}
+.stage-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:56px}
+.kicker{font-size:13px;font-weight:600;letter-spacing:.18em;color:#9fd8ff}
+.mega{font-family:var(--display);font-size:clamp(48px,8.6vw,104px);line-height:1.02;letter-spacing:-.045em;font-weight:700;margin:0;background:linear-gradient(95deg,#ffffff 20%,#bfe9ff 55%,#c6ffe4 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;max-width:12em}
+.lede{font-size:clamp(17px,2vw,24px);color:rgba(245,245,247,.72);margin:18px 0 0;letter-spacing:-.015em;font-weight:500}
+.lede a{color:#9fd8ff}
+.countdown{display:flex;align-items:baseline;gap:14px;margin-top:40px}
+.cd-num{font-family:var(--display);font-size:clamp(120px,21vw,240px);line-height:.9;font-weight:700;letter-spacing:-.07em;background:linear-gradient(180deg,#ffffff 10%,#8fd3ff 60%,#9b8cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;padding-right:.04em}
+.cd-unit{font-size:clamp(18px,2.2vw,26px);font-weight:600;color:rgba(245,245,247,.8);letter-spacing:-.02em}
+.glass-grid{display:grid;grid-template-columns:2fr 1fr 1.3fr;gap:16px;margin-top:48px}
+.glass{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:20px 22px;color:#f5f5f7;min-width:0;text-decoration:none;transition:transform .4s var(--ease),background .4s var(--ease),border-color .4s var(--ease)}
+a.glass:hover{text-decoration:none}
+@media (hover:hover){.glass:hover{transform:translateY(-3px);background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.24)}}
+.gl-k{font-size:13px;color:rgba(245,245,247,.6);font-weight:500}
+.gl-t{font-size:21px;font-weight:600;letter-spacing:-.02em;margin-top:6px;line-height:1.3;overflow-wrap:anywhere}
+.gl-n{font-family:var(--display);font-size:34px;font-weight:700;letter-spacing:-.035em;line-height:1.15;margin-top:4px}
+.gl-n small{font-size:16px;font-weight:600;margin-left:4px;letter-spacing:0;color:rgba(245,245,247,.7)}
+.gl-s{font-size:13px;color:rgba(245,245,247,.62);margin-top:6px}
+.glasscode{background:rgba(255,255,255,.12);color:#f5f5f7}
+.glasscode:hover{background:rgba(255,255,255,.22);color:#ffffff}
+.ringtile{display:flex;align-items:center;gap:16px;cursor:pointer}
+.ring{width:64px;height:64px;flex:none}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.12);stroke-width:7}
+.ring-fg{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dasharray 1.2s var(--ease)}
+.glassbtn{background:rgba(255,255,255,.16);color:#ffffff}
+.glassbtn:hover{background:rgba(255,255,255,.24)}
+.glassicon{color:#f5f5f7;background:rgba(255,255,255,.1)}
+.glassicon:hover{background:rgba(255,255,255,.2)}
+/* dark data card */
+.darkcard{display:grid;grid-template-columns:auto minmax(0,1fr);gap:36px;align-items:center;background:radial-gradient(120% 140% at 0% 0%,#1b2b4a 0%,#0b0f1a 55%,#050608 100%);color:#f5f5f7;border-radius:26px;padding:34px 38px;box-shadow:0 20px 50px rgba(0,0,0,.18);overflow:hidden}
+.donutwrap{position:relative;width:230px;height:230px}
+.donut{width:100%;height:100%}
+.donut-bg{fill:none;stroke:rgba(255,255,255,.09);stroke-width:14}
+.donut-seg{fill:none;stroke-width:14;stroke-linecap:butt}
+.donut-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.donut-n{font-family:var(--display);font-size:30px;font-weight:700;letter-spacing:-.035em;line-height:1.1;margin-top:2px}
+.big-dk{font-family:var(--display);font-size:clamp(30px,4vw,44px);font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-top:6px;background:linear-gradient(95deg,#ffffff,#9fd8ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.big-dk.over{background:linear-gradient(95deg,#ffffff,#ff8a80);-webkit-background-clip:text;background-clip:text}
+.legend{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px}
+.legend li{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;color:rgba(245,245,247,.78)}
+.legend i{width:10px;height:10px;border-radius:3px;display:block}
+.legend b{font-weight:600;color:#f5f5f7}
+/* motion */
+.pre{opacity:.15;transform:translateY(36px) scale(.985)}
+.reveal{transition:opacity .9s var(--ease),transform .9s var(--ease)}
+@media (hover:hover){.day,.stat,.bk,.info-grid>.card,.pk{transition:transform .35s var(--ease),box-shadow .35s var(--ease),opacity .9s var(--ease)}
+.bk:hover,.info-grid>.card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(0,0,0,.04),0 16px 40px rgba(0,0,0,.08)}}
+.stage .stage-in>*{animation:up .9s var(--ease) both}
+.stage .stage-in>*:nth-child(2){animation-delay:.08s}.stage .stage-in>*:nth-child(3){animation-delay:.16s}.stage .stage-in>*:nth-child(4){animation-delay:.24s}.stage .stage-in>*:nth-child(5){animation-delay:.32s}
+.stage.still .stage-in>*{animation:none}
+@keyframes up{from{transform:translateY(24px)}}
+nav.bottom .navbtn[aria-current="page"] svg{animation:pop .35s var(--ease)}
+@keyframes pop{50%{transform:scale(1.18)}}
+@media (max-width:820px){
+  .stage{margin-top:calc(-24px - env(safe-area-inset-top,0px));min-height:0}
+  .stage-in{padding:calc(env(safe-area-inset-top,0px) + 14px) max(16px,env(safe-area-inset-right,0px)) 130px max(16px,env(safe-area-inset-left,0px))}
+  .ridge{height:120px}
+  .ridge.r2{height:70px}
+  .stage-top{margin-bottom:36px}
+  .kicker{font-size:11px;letter-spacing:.14em}
+  .glass-grid{grid-template-columns:1fr 1fr;gap:12px;margin-top:32px}
+  .glass.wide{grid-column:1/-1}
+  .ringtile{grid-column:2}
+  .glass{padding:16px 16px;border-radius:20px}
+  .ringtile{flex-direction:column;align-items:flex-start;gap:10px}
+  .ring{width:48px;height:48px}
+  .gl-n{font-size:26px}
+  .countdown{margin-top:28px}
+  .sec-head h2{font-size:26px}
+  .darkcard{grid-template-columns:1fr;justify-items:center;padding:26px 20px;gap:22px;border-radius:22px}
+  .donut-side{width:100%}
+  .legend{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){.aur{animation:none}.pre{opacity:1;transform:none}}
+/* ===== every page: compact stage ===== */
+.stage.compact .stage-in{padding-bottom:170px}
+.stage.compact .stage-top{margin-bottom:44px}
+.stage.compact .mega{font-size:clamp(44px,7vw,88px)}
+.stage.compact .cd-num{font-size:clamp(84px,13vw,170px)}
+.stage.compact .countdown{margin-top:28px}
+.stage-split{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:end}
+.stage-split .donutwrap{width:220px;height:220px}
+.ring.big{width:100%;height:100%}
+.ring.big .ring-bg,.ring.big .ring-fg{stroke-width:5}
+.glass-grid.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.glass-grid.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.glass-grid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.glass-grid.gh{grid-template-columns:2fr 1fr 1.3fr}
+.glass-grid.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.glass-grid.g1{grid-template-columns:minmax(0,1fr)}
+.gl-n.sm{font-size:26px}
+.gl-k i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:7px;vertical-align:1px}
+.gbar{height:5px;border-radius:99px;background:rgba(255,255,255,.12);margin-top:12px;overflow:hidden}
+.gbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#5ac8fa,#a78bfa);transition:width .8s var(--ease)}
+.cv{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:14px;color:rgba(245,245,247,.7)}
+.glass #cv-nzd{background:rgba(255,255,255,.1);color:#ffffff;border:1px solid rgba(255,255,255,.16);border-radius:10px;height:34px;width:96px;padding:0 10px}
+.stage .lede a,.stage .gl-k a{color:#9fd8ff}
+.stage .cd-num #nzclock{-webkit-text-fill-color:transparent}
+/* dark tech map (always dark) */
+.mapbox{--sea:#040a14;--land:#0c1a28;--land-line:#3fb6ff;--ink:#e8f4ff;--mkb:#f5f5f7;--mkb-ink:#000000;background:#040a14;box-shadow:0 20px 60px rgba(4,10,20,.35);border:1px solid rgba(90,200,250,.18)}
+.mapbox::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(80% 60% at 30% 20%,rgba(90,140,255,.14),transparent 60%),radial-gradient(60% 50% at 80% 90%,rgba(46,230,166,.10),transparent 60%)}
+.grat{fill:none;stroke:rgba(120,180,255,.10);stroke-width:1;vector-effect:non-scaling-stroke}
+.land{stroke:rgba(90,200,250,.75)}
+.land.glow{stroke:rgba(90,200,250,.16);stroke-width:7}
+.route.glowline{stroke-width:8;opacity:.18;stroke-dasharray:none}
+.mklabel{fill:#e8f4ff;stroke:#0c1a28}
+.mk circle,.mk rect{stroke:#040a14}
+.mapctl{background:rgba(20,30,45,.7);border:1px solid rgba(255,255,255,.1)}
+.mapctl button{color:#e8f4ff}
+.mapctl button:hover{background:rgba(255,255,255,.08)}
+.mapctl button+button{border-top-color:rgba(255,255,255,.1)}
+.maplegend{background:rgba(20,30,45,.7);color:rgba(232,244,255,.7)}
+/* sheets get the same language */
+.sheet{position:relative;overflow:auto}
+.sheet::before{content:"";position:absolute;left:0;right:0;top:0;height:120px;pointer-events:none;background:radial-gradient(60% 120% at 10% 0%,rgba(46,230,166,.16),transparent 70%),radial-gradient(60% 120% at 90% 0%,rgba(122,108,255,.18),transparent 70%);border-radius:22px 22px 0 0}
+.sheet>*{position:relative}
+.sheet h2{background:linear-gradient(100deg,var(--grad-a) 35%,var(--grad-b));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+@media (max-width:820px){
+  .stage.compact .stage-in{padding-bottom:120px}
+  .stage.compact .stage-top{margin-bottom:28px}
+  .stage-split{grid-template-columns:minmax(0,1fr);gap:20px}
+  .stage-split .donutwrap{width:150px;height:150px}
+  .glass-grid:not(.gh)>:last-child:nth-child(odd){grid-column:1/-1}
+  .glass #cv-nzd{width:76px}
+  .cv{flex-wrap:nowrap;white-space:nowrap}
+  .stage-split .donut-n{font-size:20px}
+  .stage-split .gl-s,.stage-split .gl-k{font-size:11px}
+  .glass-grid.g4,.glass-grid.g5,.glass-grid.g3,.glass-grid.g2,.glass-grid.gh{grid-template-columns:1fr 1fr}
+  .gl-n.sm{font-size:21px}
+}
+/* ===== timeline rows ===== */
+.items{list-style:none;margin:0;padding:6px 0 8px;position:relative}
+.items .it{--tw:64px;--nd:36px;--px:24px;--cg:16px;position:relative;display:grid;grid-template-columns:var(--tw) var(--nd) minmax(0,1fr) auto;column-gap:var(--cg);align-items:start;padding:12px 16px 12px var(--px);margin:0;border:0;cursor:pointer;line-height:1.45;border-radius:0;transition:background .2s var(--ease)}
+.items .it+.it{border:0;margin:0;padding-left:var(--px);grid-template-columns:var(--tw) var(--nd) minmax(0,1fr) auto}
+.items .it::before{content:"";position:absolute;left:calc(var(--px) + var(--tw) + var(--cg) + var(--nd) / 2 - 1px);top:0;bottom:0;width:2px;background:var(--line)}
+.items .it:first-child::before{top:calc(12px + var(--nd) / 2)}
+.items .it:last-child::before{bottom:calc(100% - 12px - var(--nd) / 2)}
+.items .it:only-child::before{display:none}
+.items .it:hover{background:color-mix(in srgb,var(--sunk) 70%,transparent)}
+.items .it.static{cursor:default}.items .it.static:hover{background:none}
+.items .it .t{display:flex;flex-direction:column;align-items:flex-end;text-align:right;min-height:var(--nd);justify-content:center;line-height:1.2;padding:0;font-size:inherit}
+.items .it .t b{font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.items .it .t span{font-size:12px;color:var(--muted);margin-top:3px;white-space:nowrap}
+.items .it .node{position:relative;z-index:1;width:var(--nd);height:var(--nd);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--c);background:color-mix(in srgb,var(--c) 14%,var(--surface));box-shadow:0 0 0 4px var(--surface),inset 0 0 0 1px color-mix(in srgb,var(--c) 30%,transparent)}
+.items .it:hover .node{box-shadow:0 0 0 4px color-mix(in srgb,var(--sunk) 70%,var(--surface)),inset 0 0 0 1px color-mix(in srgb,var(--c) 30%,transparent)}
+.items .it .node svg{width:17px;height:17px}
+.items .it .node.empty-node{background:var(--sunk);box-shadow:0 0 0 4px var(--surface);width:12px;height:12px;margin:12px}
+.items .it .main{min-width:0;padding-top:6px}
+.items .it .name{font-size:16px;font-weight:600;line-height:24px;letter-spacing:-.015em;color:var(--ink)}
+.items .it .meta{display:flex;gap:5px;align-items:center;font-size:13px;color:var(--muted);margin-top:2px;line-height:1.5}
+.items .it .meta svg{width:13px;height:13px;flex:none;opacity:.8}
+.items .it .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.items .it .tags:empty{display:none}
+.tag{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:980px;background:var(--sunk);color:var(--muted);font-size:12px;font-weight:500;border:0;line-height:1}
+.tag svg{width:12px;height:12px}
+.tag.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.code-tag{font-family:var(--mono);color:var(--ink);cursor:pointer;letter-spacing:.02em}
+.code-tag:hover{background:var(--fern-soft);color:var(--fern)}
+.items .it .acts{display:flex;gap:2px;margin:1px 0 0}
+.items .it.done .name{text-decoration:line-through;text-decoration-color:var(--faint);color:var(--faint)}
+.items .it.done .node{filter:grayscale(1);opacity:.6}
+.items .it.nightrow .name{color:var(--ink)}
+.items .it.nightrow .t b{color:var(--faint)}
+.night{display:none}
+@media (max-width:820px){
+  .items .it{--tw:46px;--nd:32px;--px:14px;--cg:12px;padding:11px 8px 11px var(--px)}
+  .items .it+.it{padding-left:var(--px)}
+  .items .it:first-child::before{top:calc(11px + var(--nd) / 2)}
+  .items .it:last-child::before{bottom:calc(100% - 11px - var(--nd) / 2)}
+  .items .it .t b{font-size:15px}
+  .items .it .t span{font-size:11px}
+  .items .it .node svg{width:15px;height:15px}
+  .items .it .main{padding-top:4px}
+  .items .it .name{font-size:15px;line-height:22px}
+  .items .it .node.empty-node{margin:10px}
+}
+/* ===== per-page stage themes ===== */
+.deco{position:absolute;z-index:0;pointer-events:none;height:auto}
+.deco.shoot{right:3%;top:3%;width:min(34vw,360px);opacity:.7}
+.deco.flight{right:5vw;top:8%;width:min(52vw,600px);opacity:.9}
+.deco.topo{right:-6vw;top:-4%;width:min(66vw,760px);opacity:.75}
+.deco.coins{right:0;top:7%;width:min(28vw,340px);opacity:.8}
+.deco.globe{right:-8vw;top:-12%;width:min(56vw,620px);opacity:.9}
+.flight .dash{animation:dashmove 3s linear infinite}
+@keyframes dashmove{to{stroke-dashoffset:-22}}
+.pulse{transform-box:fill-box;transform-origin:center;animation:pulse 2.6s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.4);opacity:.5}100%{transform:scale(1.6);opacity:0}}
+.stage.th-bookings{background:linear-gradient(180deg,#02030c 0%,#0a1030 40%,#1a2460 78%,#2b3a86 100%)}
+.th-bookings .a1{background:radial-gradient(closest-side,#5a7dff,transparent)}
+.th-bookings .a2{background:radial-gradient(closest-side,#9b8cff,transparent)}
+.th-bookings .a3{background:radial-gradient(closest-side,#5ac8fa,transparent)}
+.th-bookings .stars{opacity:.5}
+.stage.th-map{background:linear-gradient(180deg,#010708 0%,#03181c 40%,#063036 75%,#0b3f43 100%)}
+.th-map .a1{background:radial-gradient(closest-side,#1fd1b0,transparent)}
+.th-map .a2{background:radial-gradient(closest-side,#2a8cff,transparent);opacity:.35}
+.th-map .a3{display:none}
+.th-map .stars{opacity:.25}
+.th-map .kicker{color:#7ff0d8}
+.stage.th-budget{background:linear-gradient(180deg,#050505 0%,#14110a 40%,#2a2010 75%,#3a2c12 100%)}
+.th-budget .a1{background:radial-gradient(closest-side,#ffb340,transparent);opacity:.32}
+.th-budget .a2{background:radial-gradient(closest-side,#ffd76a,transparent);opacity:.3}
+.th-budget .a3{background:radial-gradient(closest-side,#2ee6a6,transparent);opacity:.12}
+.th-budget .stars{opacity:.35}
+.th-budget .kicker{color:#ffd27a}.th-budget .mega,.th-budget .cd-num{background-image:linear-gradient(95deg,#ffffff 15%,#ffe7a8 55%,#ffc25a 95%)}.th-budget .glass{background:rgba(255,214,120,.07);border-color:rgba(255,214,120,.18)}
+.stage.th-packing{background:linear-gradient(180deg,#0d0b24 0%,#3a1f4d 30%,#7a3b55 58%,#c0604a 82%,#e08a4e 100%)}
+.th-packing .a1{background:radial-gradient(closest-side,#ffb26b,transparent);opacity:.4;top:30%}
+.th-packing .a2{background:radial-gradient(closest-side,#ff6f91,transparent);opacity:.3}
+.th-packing .a3{display:none}
+.th-packing .stars{inset:0 0 55% 0}
+.th-packing .kicker{color:#ffc99a}
+.stage.th-info{background:linear-gradient(180deg,#02040d 0%,#061334 42%,#0b2856 78%,#123667 100%)}
+.th-info .a1{background:radial-gradient(closest-side,#2ee6a6,transparent)}
+.th-info .a2{background:radial-gradient(closest-side,#2a8cff,transparent)}
+.th-info .a3{display:none}
+@media (max-width:820px){
+  .deco.shoot{width:40vw;right:2vw;top:4%;opacity:.55}
+  .deco.flight{width:84vw;right:2vw;top:10%;opacity:.55}
+  .deco.topo{width:120vw;right:-40vw;top:0;opacity:.55}
+  .deco.coins{width:62vw;right:-8vw;top:4%;opacity:.45}
+  .deco.globe{width:92vw;right:-40vw;top:-4%;opacity:.4}
+}
+.deco.compass{right:1vw;top:6%;width:min(20vw,250px);opacity:.75}
+@media (max-width:820px){.deco.compass{width:50vw;right:-10vw;top:3%;opacity:.5}}
+@media (prefers-reduced-motion:reduce){.flight .dash,.pulse{animation:none}}
+</style></head><body style="margin:0"><div id="app-root" hidden>
+
+<div class="app">
+  <nav class="side" id="sidenav" aria-label="主导航"></nav>
+  <main><div class="wrap" id="view"></div></main>
+  <nav class="bottom" id="bottomnav" aria-label="主导航"></nav>
+</div>
+<div id="layer"></div>
+<div id="defs"></div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- geometry (Natural Earth via world-atlas, simplified) ---------- */
+const NZ = [[[176.95,-39.61],[177.04,-39.66],[177.12,-39.67],[177.08,-39.73],[177.04,-39.75],[176.98,-39.86],[176.89,-40.05],[176.9,-40.08],[176.84,-40.18],[176.75,-40.25],[176.72,-40.24],[176.67,-40.31],[176.7,-40.29],[176.64,-40.39],[176.61,-40.48],[176.54,-40.49],[176.48,-40.56],[176.43,-40.6],[176.39,-40.68],[176.35,-40.69],[176.22,-40.93],[176.17,-40.95],[176.12,-41.01],[176.07,-41.14],[175.97,-41.25],[175.78,-41.37],[175.67,-41.42],[175.45,-41.55],[175.38,-41.57],[175.33,-41.61],[175.22,-41.61],[175.18,-41.51],[175.2,-41.44],[175.18,-41.42],[175.06,-41.38],[175.01,-41.39],[174.94,-41.44],[174.87,-41.42],[174.87,-41.33],[174.9,-41.25],[174.86,-41.22],[174.81,-41.23],[174.77,-41.28],[174.83,-41.3],[174.8,-41.34],[174.74,-41.35],[174.65,-41.32],[174.6,-41.26],[174.68,-41.22],[174.75,-41.16],[174.78,-41.12],[174.84,-41.09],[174.84,-41.04],[174.93,-40.98],[174.98,-40.87],[175.04,-40.83],[175.14,-40.67],[175.19,-40.57],[175.2,-40.47],[175.22,-40.46],[175.24,-40.29],[175.22,-40.25],[175.17,-40.11],[174.97,-39.92],[174.84,-39.86],[174.74,-39.86],[174.54,-39.81],[174.42,-39.72],[174.32,-39.61],[174.21,-39.58],[174.05,-39.56],[173.99,-39.54],[173.85,-39.46],[173.78,-39.39],[173.76,-39.3],[173.78,-39.21],[173.85,-39.13],[173.96,-39.1],[174.21,-38.97],[174.37,-38.98],[174.46,-38.94],[174.58,-38.84],[174.61,-38.75],[174.64,-38.64],[174.65,-38.42],[174.7,-38.33],[174.72,-38.19],[174.7,-38.12],[174.78,-38.11],[174.85,-38.15],[174.84,-38.12],[174.92,-38.12],[174.88,-38.06],[174.84,-38.06],[174.79,-38.09],[174.8,-38.04],[174.89,-37.99],[174.85,-37.95],[174.82,-38],[174.79,-37.99],[174.79,-37.87],[174.82,-37.83],[174.98,-37.8],[174.95,-37.78],[174.97,-37.73],[174.87,-37.78],[174.85,-37.76],[174.79,-37.57],[174.73,-37.46],[174.73,-37.39],[174.78,-37.37],[174.81,-37.29],[174.73,-37.36],[174.69,-37.33],[174.56,-37.06],[174.64,-37.06],[174.65,-37.1],[174.74,-37.24],[174.73,-37.16],[174.79,-37.11],[174.88,-37.08],[174.93,-37.12],[174.94,-37.07],[174.85,-37.04],[174.83,-36.99],[174.8,-37.02],[174.78,-36.99],[174.83,-36.94],[174.77,-36.93],[174.67,-36.94],[174.62,-37.01],[174.58,-37],[174.52,-37.04],[174.49,-37.01],[174.41,-36.76],[174.36,-36.69],[174.22,-36.55],[174.19,-36.5],[174.2,-36.47],[174.24,-36.44],[174.32,-36.53],[174.37,-36.63],[174.4,-36.62],[174.43,-36.67],[174.47,-36.58],[174.47,-36.52],[174.45,-36.51],[174.45,-36.46],[174.47,-36.44],[174.44,-36.41],[174.47,-36.37],[174.43,-36.36],[174.39,-36.39],[174.33,-36.39],[174.28,-36.37],[174.3,-36.32],[174.38,-36.33],[174.52,-36.25],[174.51,-36.23],[174.41,-36.26],[174.35,-36.3],[174.38,-36.22],[174.44,-36.14],[174.39,-36.12],[174.4,-36.16],[174.36,-36.22],[174.27,-36.17],[174.28,-36.12],[174.24,-36.15],[174.23,-36.12],[174.18,-36.15],[174.19,-36.18],[174.24,-36.18],[174.25,-36.22],[174.29,-36.21],[174.32,-36.24],[174.25,-36.27],[174.21,-36.25],[174.14,-36.17],[174.07,-36.17],[174,-36.12],[173.99,-36.06],[173.94,-35.99],[173.9,-35.96],[173.95,-35.92],[173.91,-35.88],[173.92,-35.93],[173.88,-35.96],[173.96,-36.04],[174.01,-36.15],[174.04,-36.17],[174.2,-36.35],[174.18,-36.38],[174.08,-36.4],[174.06,-36.36],[174.02,-36.27],[173.89,-36.12],[173.86,-36.07],[173.63,-35.82],[173.41,-35.57],[173.46,-35.44],[173.5,-35.42],[173.54,-35.45],[173.55,-35.4],[173.57,-35.43],[173.58,-35.38],[173.64,-35.36],[173.66,-35.31],[173.62,-35.32],[173.6,-35.29],[173.59,-35.34],[173.57,-35.27],[173.55,-35.29],[173.57,-35.34],[173.55,-35.37],[173.51,-35.35],[173.46,-35.39],[173.41,-35.39],[173.39,-35.51],[173.37,-35.52],[173.27,-35.39],[173.31,-35.34],[173.32,-35.3],[173.27,-35.32],[173.25,-35.37],[173.21,-35.33],[173.26,-35.28],[173.18,-35.29],[173.1,-35.22],[173.1,-35.19],[173.15,-35.19],[173.2,-35.11],[173.2,-35.06],[173.16,-34.94],[173.07,-34.86],[173.03,-34.79],[173,-34.77],[172.8,-34.55],[172.67,-34.48],[172.7,-34.41],[172.83,-34.45],[172.9,-34.41],[173.01,-34.42],[173.08,-34.41],[173.04,-34.45],[173.04,-34.52],[173.01,-34.53],[172.96,-34.47],[172.95,-34.52],[172.91,-34.54],[172.95,-34.57],[173,-34.56],[173.01,-34.65],[173.03,-34.62],[173.04,-34.55],[173.07,-34.7],[173.18,-34.79],[173.19,-34.83],[173.12,-34.77],[173.12,-34.81],[173.16,-34.84],[173.3,-34.91],[173.27,-34.95],[173.26,-35],[173.33,-35.02],[173.37,-34.97],[173.36,-34.87],[173.49,-34.83],[173.5,-34.87],[173.42,-34.88],[173.41,-34.92],[173.48,-34.99],[173.55,-34.99],[173.58,-35.02],[173.57,-34.93],[173.66,-34.97],[173.73,-34.96],[173.75,-35],[173.78,-35.01],[173.73,-35.07],[173.76,-35.1],[173.8,-35.02],[173.89,-35.01],[173.96,-35.06],[173.99,-35.12],[174.1,-35.12],[174.15,-35.18],[174.1,-35.19],[174.09,-35.16],[174.02,-35.17],[174.05,-35.2],[174.03,-35.23],[174.09,-35.22],[174.09,-35.27],[174.14,-35.32],[174.15,-35.37],[174.17,-35.33],[174.21,-35.34],[174.25,-35.31],[174.16,-35.29],[174.18,-35.27],[174.28,-35.26],[174.35,-35.2],[174.34,-35.31],[174.4,-35.32],[174.4,-35.38],[174.34,-35.34],[174.39,-35.42],[174.46,-35.43],[174.5,-35.5],[174.46,-35.51],[174.57,-35.59],[174.56,-35.65],[174.48,-35.64],[174.55,-35.7],[174.52,-35.72],[174.59,-35.76],[174.58,-35.81],[174.61,-35.84],[174.58,-35.85],[174.52,-35.81],[174.5,-35.77],[174.38,-35.79],[174.36,-35.71],[174.35,-35.84],[174.4,-35.82],[174.5,-35.83],[174.52,-35.87],[174.48,-35.91],[174.5,-35.99],[174.57,-36.04],[174.63,-36.06],[174.63,-36.11],[174.76,-36.24],[174.82,-36.28],[174.81,-36.33],[174.88,-36.35],[174.75,-36.35],[174.78,-36.44],[174.78,-36.49],[174.74,-36.42],[174.72,-36.41],[174.74,-36.5],[174.72,-36.52],[174.72,-36.59],[174.79,-36.62],[174.85,-36.62],[174.77,-36.64],[174.72,-36.63],[174.76,-36.67],[174.82,-36.82],[174.74,-36.82],[174.7,-36.76],[174.62,-36.8],[174.68,-36.8],[174.65,-36.83],[174.68,-36.85],[174.68,-36.91],[174.7,-36.87],[174.77,-36.84],[174.9,-36.86],[174.87,-36.91],[174.9,-36.95],[174.93,-36.84],[174.96,-36.93],[175.02,-36.92],[175,-36.88],[175.08,-36.88],[175.08,-36.95],[175.11,-36.97],[175.17,-36.95],[175.24,-36.94],[175.33,-37.01],[175.32,-37.15],[175.37,-37.21],[175.45,-37.22],[175.56,-37.18],[175.58,-37.24],[175.6,-37.23],[175.56,-37.11],[175.56,-37.05],[175.53,-36.96],[175.47,-36.92],[175.46,-36.86],[175.52,-36.84],[175.47,-36.81],[175.52,-36.8],[175.48,-36.7],[175.5,-36.65],[175.44,-36.59],[175.39,-36.57],[175.36,-36.53],[175.36,-36.48],[175.44,-36.47],[175.51,-36.53],[175.53,-36.51],[175.56,-36.55],[175.54,-36.6],[175.6,-36.62],[175.61,-36.68],[175.63,-36.7],[175.64,-36.77],[175.69,-36.72],[175.72,-36.74],[175.79,-36.71],[175.85,-36.72],[175.85,-36.75],[175.81,-36.75],[175.71,-36.84],[175.74,-36.89],[175.75,-36.84],[175.83,-36.83],[175.85,-36.84],[175.89,-36.97],[175.87,-37.06],[175.9,-37.04],[175.92,-37.08],[175.89,-37.14],[175.92,-37.15],[175.92,-37.2],[175.89,-37.17],[175.9,-37.23],[175.94,-37.28],[175.96,-37.38],[176,-37.46],[175.98,-37.47],[176.06,-37.5],[176.1,-37.53],[176.17,-37.62],[176.06,-37.58],[176.1,-37.57],[176.04,-37.53],[175.94,-37.52],[175.95,-37.56],[176,-37.59],[176,-37.63],[176.05,-37.62],[176.09,-37.67],[176.13,-37.69],[176.19,-37.67],[176.2,-37.72],[176.25,-37.71],[176.2,-37.62],[176.24,-37.63],[176.27,-37.68],[176.52,-37.76],[176.72,-37.88],[176.88,-37.92],[176.95,-37.93],[177,-37.96],[177.1,-37.97],[177.13,-37.98],[177.07,-37.99],[177.13,-38.02],[177.15,-37.98],[177.26,-38],[177.44,-37.98],[177.59,-37.89],[177.63,-37.81],[177.67,-37.79],[177.74,-37.68],[177.88,-37.65],[177.91,-37.61],[178.01,-37.58],[177.99,-37.54],[178.03,-37.55],[178.28,-37.56],[178.34,-37.62],[178.5,-37.65],[178.57,-37.7],[178.5,-37.78],[178.47,-37.85],[178.43,-37.87],[178.35,-38.01],[178.38,-38.11],[178.33,-38.15],[178.35,-38.19],[178.32,-38.27],[178.36,-38.32],[178.32,-38.4],[178.35,-38.43],[178.3,-38.46],[178.3,-38.53],[178.18,-38.64],[178.06,-38.72],[178,-38.68],[177.93,-38.7],[177.96,-38.76],[177.94,-38.82],[177.93,-38.93],[177.88,-39.08],[177.95,-39.09],[178,-39.13],[177.94,-39.17],[177.91,-39.26],[177.87,-39.29],[177.84,-39.23],[177.83,-39.17],[177.87,-39.1],[177.82,-39.11],[177.76,-39.08],[177.44,-39.07],[177.39,-39.08],[177.07,-39.2],[177.03,-39.28],[176.94,-39.35],[176.9,-39.41],[176.94,-39.5],[176.95,-39.61]],[[172.75,-43.28],[172.74,-43.39],[172.73,-43.41],[172.78,-43.57],[172.83,-43.6],[172.74,-43.61],[172.68,-43.64],[172.74,-43.66],[172.76,-43.64],[172.85,-43.63],[172.88,-43.67],[172.89,-43.61],[172.92,-43.63],[172.93,-43.68],[172.97,-43.65],[173.02,-43.68],[173.07,-43.65],[173.11,-43.7],[173.12,-43.77],[173.11,-43.83],[173.03,-43.89],[173,-43.89],[172.96,-43.76],[172.93,-43.84],[172.97,-43.9],[172.88,-43.9],[172.82,-43.88],[172.75,-43.82],[172.76,-43.79],[172.55,-43.83],[172.42,-43.86],[172.42,-43.84],[172.65,-43.78],[172.55,-43.76],[172.5,-43.72],[172.42,-43.74],[172.39,-43.77],[172.39,-43.85],[172.36,-43.87],[172.25,-43.88],[172.23,-43.9],[172.06,-43.96],[171.87,-44.06],[171.81,-44.06],[171.72,-44.11],[171.55,-44.17],[171.42,-44.26],[171.35,-44.28],[171.28,-44.37],[171.28,-44.44],[171.23,-44.5],[171.22,-44.53],[171.17,-44.55],[171.19,-44.57],[171.22,-44.74],[171.17,-44.79],[171.2,-44.79],[171.21,-44.85],[171.19,-44.93],[171.09,-45.07],[170.98,-45.16],[170.93,-45.24],[170.88,-45.36],[170.91,-45.4],[170.86,-45.45],[170.87,-45.48],[170.8,-45.53],[170.77,-45.6],[170.68,-45.62],[170.72,-45.64],[170.7,-45.68],[170.63,-45.73],[170.69,-45.73],[170.76,-45.76],[170.74,-45.79],[170.67,-45.8],[170.56,-45.9],[170.7,-45.84],[170.78,-45.78],[170.79,-45.81],[170.78,-45.88],[170.72,-45.88],[170.7,-45.91],[170.49,-45.92],[170.41,-45.94],[170.33,-45.98],[170.26,-46.06],[170.25,-46.1],[170.22,-46.17],[170.1,-46.22],[170.04,-46.28],[169.9,-46.34],[169.87,-46.38],[169.85,-46.47],[169.79,-46.49],[169.7,-46.48],[169.66,-46.49],[169.75,-46.5],[169.74,-46.53],[169.64,-46.58],[169.57,-46.57],[169.48,-46.6],[169.5,-46.62],[169.41,-46.62],[169.39,-46.64],[169.31,-46.63],[169.27,-46.65],[169.21,-46.66],[169.2,-46.62],[169.15,-46.66],[169.06,-46.64],[169.03,-46.68],[168.88,-46.64],[168.84,-46.56],[168.7,-46.58],[168.71,-46.56],[168.62,-46.55],[168.65,-46.6],[168.59,-46.61],[168.42,-46.6],[168.46,-46.57],[168.57,-46.59],[168.51,-46.56],[168.43,-46.56],[168.36,-46.54],[168.36,-46.58],[168.4,-46.62],[168.32,-46.58],[168.27,-46.53],[168.33,-46.53],[168.39,-46.5],[168.37,-46.42],[168.34,-46.42],[168.34,-46.47],[168.29,-46.46],[168.22,-46.35],[168.17,-46.34],[168.06,-46.35],[168.06,-46.38],[167.95,-46.37],[167.92,-46.39],[167.85,-46.4],[167.74,-46.32],[167.79,-46.29],[167.7,-46.19],[167.58,-46.16],[167.46,-46.15],[167.41,-46.25],[167.3,-46.27],[167.23,-46.26],[167.17,-46.27],[167.09,-46.24],[166.97,-46.23],[166.83,-46.23],[166.76,-46.22],[166.71,-46.19],[166.68,-46.15],[166.72,-46.13],[166.79,-46.07],[166.83,-46],[166.95,-45.95],[166.93,-45.95],[166.8,-45.99],[166.79,-46.04],[166.62,-46.09],[166.66,-46],[166.71,-45.97],[166.79,-45.95],[166.69,-45.93],[166.74,-45.89],[166.71,-45.88],[166.63,-45.97],[166.54,-45.98],[166.49,-46.01],[166.47,-46],[166.47,-45.84],[166.49,-45.81],[166.74,-45.79],[166.85,-45.77],[166.89,-45.78],[167.01,-45.72],[166.89,-45.71],[166.8,-45.72],[166.79,-45.69],[166.89,-45.65],[166.78,-45.66],[166.78,-45.59],[166.91,-45.56],[166.99,-45.58],[166.95,-45.55],[167.05,-45.52],[167.05,-45.49],[166.92,-45.54],[166.84,-45.55],[166.78,-45.57],[166.72,-45.58],[166.7,-45.54],[166.74,-45.48],[166.77,-45.41],[166.81,-45.39],[166.95,-45.44],[166.92,-45.39],[166.9,-45.4],[166.81,-45.35],[166.88,-45.28],[166.96,-45.33],[166.93,-45.35],[167.02,-45.34],[167.06,-45.39],[167.01,-45.43],[167.05,-45.43],[167.1,-45.38],[167.15,-45.41],[167.17,-45.47],[167.2,-45.45],[167.05,-45.33],[167.08,-45.31],[167.2,-45.29],[167.24,-45.33],[167.24,-45.26],[167.07,-45.28],[167.01,-45.21],[167,-45.15],[167.03,-45.12],[167.09,-45.14],[167.14,-45.18],[167.18,-45.18],[167.08,-45.1],[167.05,-45.1],[167.12,-45.04],[167.18,-45.09],[167.18,-45.13],[167.21,-45.09],[167.27,-45.09],[167.18,-45.06],[167.15,-45.01],[167.19,-44.98],[167.33,-45.02],[167.21,-44.97],[167.2,-44.95],[167.27,-44.91],[167.33,-44.9],[167.31,-44.88],[167.42,-44.84],[167.45,-44.9],[167.44,-44.93],[167.46,-44.99],[167.52,-44.99],[167.48,-44.93],[167.45,-44.84],[167.46,-44.79],[167.52,-44.76],[167.56,-44.8],[167.54,-44.85],[167.57,-44.88],[167.6,-44.81],[167.55,-44.73],[167.6,-44.68],[167.67,-44.66],[167.75,-44.6],[167.81,-44.6],[167.89,-44.64],[167.93,-44.7],[167.93,-44.64],[167.86,-44.6],[167.84,-44.51],[167.94,-44.41],[168.03,-44.35],[168.03,-44.32],[168.12,-44.32],[168.14,-44.28],[168.1,-44.26],[168.17,-44.24],[168.27,-44.18],[168.34,-44.12],[168.35,-44.08],[168.4,-44.05],[168.37,-44.04],[168.47,-44.03],[168.65,-43.96],[168.7,-44.01],[168.75,-44.01],[168.86,-43.97],[169,-43.88],[169.07,-43.86],[169.09,-43.82],[169.19,-43.76],[169.3,-43.71],[169.38,-43.69],[169.42,-43.65],[169.48,-43.65],[169.58,-43.6],[169.65,-43.61],[169.73,-43.57],[169.81,-43.47],[169.85,-43.46],[169.86,-43.43],[169.9,-43.39],[170.03,-43.35],[170.1,-43.26],[170.18,-43.23],[170.24,-43.24],[170.31,-43.16],[170.27,-43.16],[170.2,-43.22],[170.22,-43.17],[170.29,-43.11],[170.36,-43.1],[170.43,-43.05],[170.51,-43.01],[170.7,-42.96],[170.77,-42.92],[170.86,-42.84],[170.94,-42.73],[171,-42.71],[171.12,-42.59],[171.23,-42.45],[171.23,-42.4],[171.31,-42.29],[171.33,-42.15],[171.36,-42.06],[171.43,-41.98],[171.49,-41.83],[171.47,-41.77],[171.64,-41.76],[171.86,-41.67],[171.9,-41.61],[171.99,-41.45],[172.07,-41.41],[172.09,-41.31],[172.14,-41.29],[172.12,-41.25],[172.11,-41.14],[172.12,-41.1],[172.11,-40.89],[172.14,-40.88],[172.22,-40.78],[172.25,-40.78],[172.36,-40.72],[172.47,-40.62],[172.54,-40.58],[172.53,-40.61],[172.6,-40.6],[172.61,-40.55],[172.56,-40.57],[172.59,-40.53],[172.64,-40.51],[172.84,-40.5],[172.97,-40.53],[172.76,-40.52],[172.73,-40.53],[172.69,-40.65],[172.66,-40.65],[172.7,-40.69],[172.69,-40.73],[172.87,-40.85],[172.99,-40.78],[173.02,-40.81],[173.01,-40.87],[173.07,-40.89],[173.06,-40.96],[173,-41.02],[173.03,-41.02],[173.07,-41.12],[173.04,-41.11],[173.03,-41.15],[173.08,-41.18],[173.11,-41.26],[173.09,-41.3],[173.13,-41.31],[173.21,-41.3],[173.29,-41.26],[173.4,-41.16],[173.5,-41.14],[173.57,-41.07],[173.6,-41.05],[173.67,-41.11],[173.67,-41.08],[173.74,-41.05],[173.74,-41.02],[173.69,-41.04],[173.68,-41.01],[173.75,-40.98],[173.8,-40.97],[173.85,-40.93],[173.87,-40.98],[173.91,-40.93],[173.98,-40.9],[174.03,-40.93],[173.97,-40.93],[173.92,-41],[173.78,-41.01],[173.8,-41.03],[173.77,-41.1],[173.8,-41.1],[173.83,-41.06],[173.93,-41.05],[173.93,-41.08],[173.88,-41.07],[173.89,-41.11],[173.82,-41.16],[173.87,-41.17],[173.85,-41.24],[173.76,-41.26],[173.79,-41.29],[173.93,-41.23],[174.05,-41.21],[174.02,-41.2],[174.11,-41.19],[174.14,-41.18],[173.98,-41.18],[173.9,-41.19],[173.89,-41.16],[173.94,-41.1],[173.98,-41.09],[173.98,-41.15],[174.04,-41.04],[174.02,-41.02],[174,-41.05],[173.95,-41.01],[174.02,-40.97],[174.07,-41.01],[174.15,-41.01],[174.2,-40.98],[174.23,-41.07],[174.3,-41],[174.32,-41.03],[174.21,-41.15],[174.2,-41.09],[174.18,-41.15],[174.21,-41.19],[174.15,-41.22],[174.09,-41.22],[174.05,-41.24],[173.97,-41.25],[173.93,-41.28],[174.02,-41.27],[174.07,-41.25],[174.15,-41.24],[174.19,-41.26],[174.27,-41.25],[174.33,-41.22],[174.24,-41.32],[174.18,-41.35],[174.2,-41.31],[174.13,-41.32],[174.05,-41.44],[174.06,-41.52],[174.11,-41.56],[174.1,-41.5],[174.17,-41.58],[174.23,-41.72],[174.29,-41.75],[174.2,-41.88],[174,-42.03],[173.96,-42.11],[173.96,-42.16],[173.87,-42.25],[173.75,-42.33],[173.7,-42.38],[173.71,-42.44],[173.67,-42.41],[173.61,-42.44],[173.56,-42.49],[173.5,-42.61],[173.35,-42.84],[173.32,-42.85],[173.33,-42.9],[173.28,-42.96],[173.15,-43],[173.14,-43.03],[173.08,-43.07],[172.95,-43.09],[172.81,-43.17],[172.75,-43.28]],[[168.2,-47.05],[168.25,-47.07],[168.18,-47.07],[168.19,-47.1],[168,-47.12],[167.9,-47.19],[167.84,-47.17],[167.79,-47.17],[167.76,-47.14],[167.62,-47.21],[167.63,-47.23],[167.73,-47.21],[167.67,-47.26],[167.66,-47.24],[167.63,-47.26],[167.52,-47.27],[167.52,-47.25],[167.55,-47.18],[167.61,-47.15],[167.62,-47.08],[167.65,-47.05],[167.75,-47.03],[167.74,-46.96],[167.78,-46.95],[167.82,-46.9],[167.76,-46.82],[167.76,-46.76],[167.79,-46.7],[167.88,-46.7],[167.92,-46.68],[168,-46.72],[168.09,-46.81],[168.19,-46.88],[168.17,-46.91],[168.01,-46.89],[168.02,-46.93],[167.97,-46.97],[168.05,-46.93],[168.15,-46.97],[168.14,-46.99],[168.23,-46.97],[168.26,-47],[168.25,-47.04],[168.2,-47.05]],[[175.54,-36.28],[175.56,-36.31],[175.52,-36.35],[175.51,-36.31],[175.47,-36.32],[175.45,-36.27],[175.36,-36.24],[175.38,-36.17],[175.33,-36.13],[175.39,-36.12],[175.37,-36.07],[175.4,-36.06],[175.46,-36.12],[175.45,-36.14],[175.53,-36.18],[175.5,-36.24],[175.54,-36.28]],[[173.78,-40.91],[173.78,-40.84],[173.85,-40.87],[173.81,-40.82],[173.83,-40.77],[173.88,-40.76],[173.89,-40.81],[173.94,-40.78],[173.97,-40.71],[173.96,-40.79],[173.92,-40.87],[173.9,-40.87],[173.8,-40.93],[173.78,-40.91]],[[166.71,-45.62],[166.74,-45.65],[166.74,-45.73],[166.64,-45.73],[166.64,-45.68],[166.6,-45.66],[166.51,-45.72],[166.57,-45.64],[166.71,-45.62]],[[175.17,-36.74],[175.22,-36.76],[175.18,-36.79],[175.18,-36.83],[175.12,-36.83],[175.01,-36.8],[175.02,-36.76],[175.11,-36.78],[175.17,-36.74]],[[174.38,-41.11],[174.4,-41.14],[174.37,-41.2],[174.26,-41.21],[174.31,-41.17],[174.37,-41.16],[174.34,-41.13],[174.38,-41.11]],[[166.98,-45.16],[167.03,-45.3],[167,-45.31],[166.91,-45.27],[166.89,-45.24],[166.97,-45.15],[166.98,-45.16]],[[168.59,-46.73],[168.61,-46.75],[168.56,-46.8],[168.54,-46.76],[168.59,-46.73]],[[175.85,-36.62],[175.8,-36.62],[175.77,-36.58],[175.8,-36.57],[175.85,-36.62]],[[174.85,-36.39],[174.9,-36.4],[174.91,-36.44],[174.86,-36.44],[174.85,-36.39]],[[175.13,-36.18],[175.15,-36.21],[175.1,-36.23],[175.08,-36.21],[175.13,-36.18]]];
+
+/* ---------- reference places with approximate coordinates ---------- */
+const PLACES_REF = [
+["奥克兰 Auckland",-36.848,174.763],["奥克兰机场 AKL",-37.008,174.785],["罗托鲁瓦 Rotorua",-38.137,176.251],
+["霍比特人村 Hobbiton",-37.872,175.683],["怀托摩萤火虫洞 Waitomo",-38.261,175.104],["陶波 Taupō",-38.686,176.070],
+["汤加里罗步道起点 Tongariro Crossing",-39.145,175.581],["惠灵顿 Wellington",-41.286,174.776],["纳皮尔 Napier",-39.493,176.912],
+["派希亚 / 岛屿湾 Paihia",-35.281,174.091],["教堂湾 Cathedral Cove",-36.828,175.790],["皮克顿 Picton",-41.290,174.006],
+["尼尔森 Nelson",-41.271,173.284],["亚伯塔斯曼 Marahau",-41.004,173.010],["凯库拉 Kaikōura",-42.400,173.680],
+["基督城 Christchurch",-43.532,172.636],["基督城机场 CHC",-43.489,172.532],["阿卡罗阿 Akaroa",-43.804,172.968],
+["亚瑟隘口 Arthur's Pass",-42.940,171.562],["蒂卡波湖 Lake Tekapo",-44.004,170.477],["普卡基湖 Lake Pukaki",-44.100,170.180],
+["库克山村 Mt Cook Village",-43.735,170.096],["胡克谷步道 Hooker Valley Track",-43.718,170.094],["特威泽尔 Twizel",-44.257,170.100],
+["瓦纳卡 Wānaka",-44.703,169.132],["瓦纳卡孤独的树 That Wanaka Tree",-44.700,169.118],["罗伊峰停车场 Roys Peak",-44.697,169.085],
+["蓝池 Blue Pools",-44.168,169.276],["皇后镇 Queenstown",-45.031,168.663],["皇后镇机场 ZQN",-45.021,168.739],
+["箭镇 Arrowtown",-44.941,168.832],["格林诺奇 Glenorchy",-44.850,168.388],["蒂阿瑙 Te Anau",-45.414,167.718],
+["米尔福德峡湾 Milford Sound",-44.671,167.926],["马纳普里 / 神奇峡湾 Doubtful Sound",-45.566,167.611],["哈斯特 Haast",-43.881,169.042],
+["福克斯冰川 Fox Glacier",-43.464,170.017],["马瑟森湖 Lake Matheson",-43.442,169.966],["弗朗茨约瑟夫 Franz Josef",-43.387,170.183],
+["霍基蒂卡 Hokitika",-42.717,170.967],["千层饼岩 Punakaiki",-42.109,171.336],["但尼丁 Dunedin",-45.879,170.503],
+["奥玛鲁 Oamaru",-45.097,170.971],["摩拉基大圆石 Moeraki Boulders",-45.345,170.826],["因弗卡吉尔 Invercargill",-46.413,168.353],
+["掘金角灯塔 Nugget Point",-46.447,169.814]
+];
+
+/* ---------- small utils ---------- */
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const DAY_COLORS = ["#0071e3","#1a9a55","#8944ab","#d6336c","#0a8fa3","#5e5ce6","#b07d12","#d93a2f","#2f7d8c","#6e6e73"];
+const dayColor = d => d > 0 ? DAY_COLORS[(d - 1) % DAY_COLORS.length] : "#86868b";
+const WD = ["周日","周一","周二","周三","周四","周五","周六"];
+const pad = n => String(n).padStart(2, "0");
+function parseDate(s){ if(!s) return null; const [y,m,d] = s.slice(0,10).split("-").map(Number); if(!y) return null; return new Date(y, m-1, d); }
+function fmtDate(d){ return `${d.getMonth()+1}月${d.getDate()}日`; }
+function isoDate(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function dayDiff(a,b){ return Math.round((b - a) / 86400000); }
+function fmtDT(s){ if(!s) return ""; const d = parseDate(s); const t = s.length > 10 ? s.slice(11,16) : ""; return `${fmtDate(d)} ${WD[d.getDay()]}${t ? " " + t : ""}`; }
+function fmtRange(a, b){ if(!a) return b ? "至 " + fmtDT(b) : ""; if(!b) return fmtDT(a); if(a.slice(0,10) === b.slice(0,10)) return fmtDT(a) + (b.length > 10 ? "–" + b.slice(11,16) : ""); return fmtDT(a) + " → " + fmtDT(b); }
+function money(n, cur){ const v = Math.round((Number(n)||0) * 100) / 100; return (cur === "SGD" ? "S$" : "NZ$") + v.toLocaleString("en-US", {minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2}); }
+function lsGet(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
+function lsSet(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+function toast(msg){ const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+function coordsOf(o){ const la = Number(o.lat), ln = Number(o.lng); return (o.lat !== "" && o.lat != null && isFinite(la) && isFinite(ln) && la !== 0) ? [la, ln] : null; }
+function navUrl(o){ const c = coordsOf(o); const q = c ? `${c[0]},${c[1]}` : encodeURIComponent(o.name || o.location || ""); return `https://www.google.com/maps/dir/?api=1&destination=${q}&travelmode=driving`; }
+function appleUrl(o){ const c = coordsOf(o); return c ? `https://maps.apple.com/?daddr=${c[0]},${c[1]}` : `https://maps.apple.com/?daddr=${encodeURIComponent(o.name || o.location || "")}`; }
+
+/* ---------- icons ---------- */
+const I = {
+  trip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v15H4z"/><path d="M4 9h16M9 3v4M15 3v4"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 5v12"/></svg>',
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>',
+  money:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/></svg>',
+  bag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a3 3 0 0 1 6 0v2M4 12h16"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  flight:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>',
+  hotel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h18a2 2 0 0 1 2 2v10M2 17h20M6 8v9"/></svg>',
+  car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16h14v-4l-2-5H7l-2 5z"/><circle cx="8" cy="16.5" r="1.8"/><circle cx="16" cy="16.5" r="1.8"/><path d="M5 12h14"/></svg>',
+  ticket:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V6h18v3a3 3 0 0 0 0 6v3H3v-3a3 3 0 0 0 0-6z"/></svg>',
+  ferry:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 6 0M5 14l1-5h12l1 5M9 9V6h6v3"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+  food:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 21V3c-2 1-3 4-3 7h3"/></svg>',
+  hike:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 20 6-11 4 6 3-4 5 9z"/></svg>',
+  camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>',
+  nav:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-8-8 18-2-8z"/></svg>',
+  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg>',
+  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
+  minus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+  fit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
+  fern:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22C12 12 14 6 19 2"/><path d="M12.5 17c-3-.5-5-2-6-4M13 13c-3-.5-4.5-2-5-4M14 9.5c-2-.5-3.2-1.8-3.6-3.5M13 17c2.5-1 4-2.5 5-5M14 13c2-1 3.5-2.5 4-4.5"/></svg>'
+};
+const BK_TYPES = {flight:["机票","flight"], hotel:["住宿","hotel"], car:["租车","car"], ferry:["渡轮/交通","ferry"], activity:["活动门票","ticket"], other:["其他","book"]};
+const PL_CATS = {sight:["景点","camera"], hike:["徒步","hike"], food:["餐饮","food"], drive:["自驾/途经","car"], other:["其他","pin"]};
+const EX_CATS = {stay:"住宿", transport:"交通", fuel:"油费", food:"餐饮", activity:"门票活动", shop:"购物", other:"其他"};
+
+/* ---------- state + storage ---------- */
+const DEFAULT_META = {name:"新西兰自驾", start:"", end:"", rate:0.77, budget:0, budgetCur:"SGD"};
+const CACHE_KEY = "nztrip-cache-v1";
+const cached = lsGet(CACHE_KEY);
+const S = {
+  meta: Object.assign({}, DEFAULT_META, cached?.meta || {}),
+  bookings: cached?.bookings || [], places: cached?.places || [], expenses: cached?.expenses || [], packing: cached?.packing || [],
+  mode: "connecting", fromCache: !!cached
+};
+let db = null;
+const COLS = ["bookings","places","expenses","packing"];
+let saveTimer = null;
+function persistCache(){ clearTimeout(saveTimer); saveTimer = setTimeout(() => lsSet(CACHE_KEY, {meta:S.meta, bookings:S.bookings, places:S.places, expenses:S.expenses, packing:S.packing}), 300); }
+
+async function put(col, obj){
+  if(!obj.id) obj.id = uid();
+  const rec = JSON.parse(JSON.stringify(obj));
+  const list = S[col]; const i = list.findIndex(x => x.id === rec.id);
+  if(i >= 0) list[i] = rec; else list.push(rec);
+  persistCache(); render();
+  if(db){ try { const {id, ...body} = rec; await db.collection(col).doc(rec.id).set(body); } catch(e){ handleWriteErr(e); } }
+}
+async function del(col, id){
+  S[col] = S[col].filter(x => x.id !== id); persistCache(); render();
+  if(db){ try { await db.collection(col).doc(id).delete(); } catch(e){ handleWriteErr(e); } }
+}
+async function putMeta(m){
+  S.meta = Object.assign({}, S.meta, m); persistCache(); render();
+  if(db){ try { await db.doc("meta/trip").set(S.meta); } catch(e){ handleWriteErr(e); } }
+}
+function handleWriteErr(e){
+  if(e && e.code === "quota_exceeded") toast("存储已满，请删除一些旧记录");
+  else toast("这次修改没能同步，已保存在本机，稍后会重试显示");
+  console.warn(e);
+}
+
+let rq = 0;
+function renderSoon(){ if(rq) return; rq = requestAnimationFrame(() => { rq = 0; render(); }); }
+function setMode(m){ S.mode = m; renderSync(); }
+async function connect(){
+  let timer = setTimeout(() => { if(S.mode === "connecting") setMode("slow"); }, 10000);
+  try { db = window.__fbdb || null; } catch(e){ db = null; }
+  if(!db){ clearTimeout(timer); setMode("local"); return; }
+  let pending = new Set(["meta", ...COLS]);
+  const settle = (k, snap) => { if(!snap.metadata.fromCache){ pending.delete(k); if(!pending.size){ clearTimeout(timer); setMode("synced"); } } };
+  const onErr = e => { clearTimeout(timer); console.warn(e); setMode("error"); };
+  db.doc("meta/trip").onSnapshot(snap => {
+    if(snap.exists) S.meta = Object.assign({}, DEFAULT_META, snap.data());
+    persistCache(); renderSoon(); settle("meta", snap);
+  }, onErr);
+  COLS.forEach(col => {
+    db.collection(col).onSnapshot(snap => {
+      S[col] = snap.docs.map(d => Object.assign({id:d.id}, d.data()));
+      persistCache(); renderSoon(); settle(col, snap);
+    }, onErr);
+  });
+}
+
+/* ---------- derived ---------- */
+function tripDays(){
+  const s = parseDate(S.meta.start), e = parseDate(S.meta.end);
+  const maxPlaceDay = Math.max(0, ...S.places.map(p => Number(p.day) || 0));
+  let n = (s && e) ? dayDiff(s, e) + 1 : 0;
+  n = Math.max(n, maxPlaceDay, 1);
+  if(n > 60) n = 60;
+  const out = [];
+  for(let i = 1; i <= n; i++){ const d = s ? new Date(s.getFullYear(), s.getMonth(), s.getDate() + i - 1) : null; out.push({n:i, date:d}); }
+  return out;
+}
+function dayOfDate(str){ const s = parseDate(S.meta.start), d = parseDate(str); if(!s || !d) return 0; return dayDiff(s, d) + 1; }
+function hotelForNight(date){
+  if(!date) return null; const iso = isoDate(date);
+  return S.bookings.find(b => b.type === "hotel" && b.start && b.end && b.start.slice(0,10) <= iso && b.end.slice(0,10) > iso) || null;
+}
+function toNZD(a, cur){ a = Number(a) || 0; const r = Number(S.meta.rate) || 0.77; return cur === "SGD" ? a / r : a; }
+function toSGD(a, cur){ a = Number(a) || 0; const r = Number(S.meta.rate) || 0.77; return cur === "SGD" ? a : a * r; }
+function sortPlaces(list){ return list.slice().sort((a,b) => (a.time || "99").localeCompare(b.time || "99") || (Number(a.order)||0) - (Number(b.order)||0)); }
+const hasExamples = () => [...S.bookings, ...S.places, ...S.expenses].some(x => x.example);
+
+/* ---------- navigation ---------- */
+const VIEWS = [["trip","行程","trip"],["bookings","预订","book"],["map","地图","map"],["budget","预算","money"],["packing","打包","bag"],["info","资讯","info"]];
+let view = (location.hash || "").slice(1); if(!VIEWS.some(v => v[0] === view)) view = "trip";
+function renderNav(){
+  const btns = VIEWS.map(([k,l,ic]) => `<button class="navbtn" data-go="${k}" ${k===view?'aria-current="page"':''}>${I[ic]}<span>${l}</span></button>`).join("");
+  $("#sidenav").innerHTML = `<div class="brand">${I.fern}<span>旅行手帐</span></div>${btns}<div class="spacer"></div><div class="sync" id="sync1"></div><button class="navbtn" data-act="settings" title="设置与备份" aria-label="设置与备份">${I.gear}</button>`;
+  $("#bottomnav").innerHTML = btns;
+  renderSync();
+}
+function renderSync(){
+  const m = {connecting:["","正在连接…"], slow:["warn","暂时连不上，显示上次的数据"], synced:["ok","已同步，电脑和手机通用"], local:["warn","仅保存在这台设备"], error:["warn","同步中断，刷新页面重试"]}[S.mode];
+  const html = `<span class="dot ${m[0]}"></span><span>${m[1]}</span>`;
+  const a = $("#sync1"); if(a) a.innerHTML = html;
+  const b = $("#sync2"); if(b) b.innerHTML = html;
+}
+function go(k){ view = k; try { history.replaceState(null, "", "#" + k); } catch(e){ location.hash = k; } renderNav(); render(); window.scrollTo(0,0); }
+window.addEventListener("hashchange", () => { const k = location.hash.slice(1); if(VIEWS.some(v => v[0] === k) && k !== view){ view = k; renderNav(); render(); } });
+
+/* ---------- views ---------- */
+const STAGE_ART = {
+  trip: {"land": "<svg class=\"ridge r1\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"url(#rg1)\" d=\"M0 230 L90 180 L150 205 L250 120 L320 165 L410 85 L470 130 L520 110 L610 175 L700 120 L790 160 L880 55 L950 125 L1050 95 L1130 160 L1230 105 L1330 150 L1440 115 L1440 320 L0 320Z\"/><path fill=\"#0a1522\" d=\"M560 320 C640 280 790 262 742 226 C708 200 770 182 812 168 L822 170 C792 184 752 202 786 228 C846 268 760 298 900 320Z\"/><path fill=\"none\" stroke=\"#ffd479\" stroke-opacity=\".75\" stroke-width=\"2.4\" stroke-dasharray=\"10 12\" d=\"M730 320 C730 290 800 258 765 228 C735 205 775 186 816 170\"/></svg><svg class=\"ridge r2\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"var(--stage-floor)\" d=\"M0 260 L120 215 L230 250 L340 200 L470 245 L600 205 L720 250 L860 210 L990 255 L1120 215 L1260 250 L1440 220 L1440 320 L0 320Z\"/></svg>", "deco": "<svg class=\"deco shoot\" viewBox=\"0 0 400 200\" aria-hidden=\"true\"><defs><linearGradient id=\"sg\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"#fff\" stop-opacity=\"0\"/><stop offset=\"1\" stop-color=\"#fff\"/></linearGradient></defs><path d=\"M40 150 L330 40\" stroke=\"url(#sg)\" stroke-width=\"2\" stroke-linecap=\"round\"/><circle cx=\"330\" cy=\"40\" r=\"2.6\" fill=\"#fff\"/></svg>"},
+  bookings: {"land": "<svg class=\"ridge r1\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"url(#cl1)\" d=\"M-40 320 L-40 170 Q30 106 100 175 Q183 106 265 177 Q311 116 358 177 Q429 100 499 164 Q563 124 627 171 Q695 133 763 165 Q819 99 875 174 Q927 104 978 164 Q1048 129 1117 162 Q1197 125 1277 165 Q1361 101 1446 167 Q1529 113 1613 173 L1480 320Z\"/><path fill=\"url(#cl2)\" opacity=\".9\" d=\"M-40 320 L-40 215 Q24 175 87 209 Q167 186 246 215 Q327 184 408 216 Q478 185 548 213 Q621 173 694 219 Q745 179 796 209 Q862 160 927 216 Q1003 175 1079 219 Q1128 178 1177 218 Q1251 174 1325 208 Q1381 180 1436 211 Q1514 180 1591 221 L1480 320Z\"/></svg><svg class=\"ridge r2\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"var(--stage-floor)\" d=\"M0 260 L120 215 L230 250 L340 200 L470 245 L600 205 L720 250 L860 210 L990 255 L1120 215 L1260 250 L1440 220 L1440 320 L0 320Z\"/></svg>", "deco": "<svg class=\"deco flight\" viewBox=\"0 0 640 340\" aria-hidden=\"true\"><path d=\"M20 330 Q300 -40 610 120\" fill=\"none\" stroke=\"#9fd8ff\" stroke-opacity=\".55\" stroke-width=\"2\" stroke-dasharray=\"2 9\" stroke-linecap=\"round\" class=\"dash\"/><circle cx=\"20\" cy=\"330\" r=\"5\" fill=\"#5ac8fa\"/><circle cx=\"20\" cy=\"330\" r=\"12\" fill=\"none\" stroke=\"#5ac8fa\" stroke-opacity=\".4\"/><circle cx=\"610\" cy=\"120\" r=\"5\" fill=\"#a78bfa\"/><circle cx=\"610\" cy=\"120\" r=\"14\" fill=\"none\" stroke=\"#a78bfa\" stroke-opacity=\".4\"/><g transform=\"translate(470 58) rotate(14) scale(1.5)\"><path fill=\"#ffffff\" d=\"M-14 -1.6 L-2 -1.6 L6 -11 L9.5 -11 L5 -1.6 L12 -1.6 C15 -1.6 15 1.6 12 1.6 L5 1.6 L9.5 11 L6 11 L-2 1.6 L-14 1.6 L-16.5 5 L-19 5 L-17.4 0 L-19 -5 L-16.5 -5Z\"/></g><circle cx=\"120\" cy=\"150\" r=\"2\" fill=\"#9fd8ff\" opacity=\"0.5\"/><circle cx=\"260\" cy=\"70\" r=\"2\" fill=\"#9fd8ff\" opacity=\"0.4\"/><circle cx=\"470\" cy=\"60\" r=\"2\" fill=\"#9fd8ff\" opacity=\"0.4\"/><circle cx=\"560\" cy=\"95\" r=\"2\" fill=\"#9fd8ff\" opacity=\"0.5\"/></svg>"},
+  map: {"land": "<svg class=\"ridge r1\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"url(#rgMap)\" d=\"M0 230 L90 180 L150 205 L250 120 L320 165 L410 85 L470 130 L520 110 L610 175 L700 120 L790 160 L880 55 L950 125 L1050 95 L1130 160 L1230 105 L1330 150 L1440 115 L1440 320 L0 320Z\"/></svg><svg class=\"ridge r2\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"var(--stage-floor)\" d=\"M0 260 L120 215 L230 250 L340 200 L470 245 L600 205 L720 250 L860 210 L990 255 L1120 215 L1260 250 L1440 220 L1440 320 L0 320Z\"/></svg>", "deco": "<svg class=\"deco topo\" viewBox=\"0 0 700 420\" aria-hidden=\"true\"><g stroke=\"#7ff0d8\" stroke-opacity=\".07\" stroke-width=\"1\"><path d=\"M0 0 V420\"/><path d=\"M80 0 V420\"/><path d=\"M160 0 V420\"/><path d=\"M240 0 V420\"/><path d=\"M320 0 V420\"/><path d=\"M400 0 V420\"/><path d=\"M480 0 V420\"/><path d=\"M560 0 V420\"/><path d=\"M640 0 V420\"/><path d=\"M0 20 H700\"/><path d=\"M0 100 H700\"/><path d=\"M0 180 H700\"/><path d=\"M0 260 H700\"/><path d=\"M0 340 H700\"/></g><g fill=\"none\" stroke=\"#5fe3c8\" stroke-width=\"1.3\"><path d=\"M360 200 L358 202 L356 203 L355 205 L354 206 L354 208 L353 210 L353 211 L352 213 L351 215 L350 217 L348 219 L346 220 L343 221 L341 221 L338 222 L335 222 L333 223 L330 223 L327 223 L324 224 L321 223 L318 223 L316 222 L314 220 L312 219 L311 216 L310 214 L310 212 L310 210 L310 208 L310 207 L309 206 L307 204 L305 203 L303 202 L301 200 L299 198 L298 196 L297 194 L297 191 L298 189 L300 187 L302 186 L304 185 L307 183 L309 182 L312 181 L314 181 L317 180 L319 179 L322 179 L325 178 L327 178 L330 179 L332 180 L335 181 L337 182 L339 183 L341 183 L343 184 L345 184 L348 185 L351 185 L354 186 L357 186 L360 188 L362 189 L363 191 L363 194 L362 196 L361 198Z\" stroke-opacity=\"0.55\"/><path d=\"M393 200 L389 204 L386 207 L383 210 L381 213 L380 217 L379 221 L379 224 L377 229 L375 233 L372 236 L369 240 L364 242 L359 244 L353 246 L347 247 L342 248 L336 249 L330 249 L324 250 L318 250 L311 250 L305 249 L300 247 L295 244 L292 240 L289 235 L288 230 L288 226 L288 221 L288 218 L287 214 L285 212 L282 209 L278 207 L273 204 L268 200 L264 196 L261 191 L259 186 L260 182 L262 177 L266 173 L270 170 L275 167 L281 165 L286 162 L292 160 L297 159 L302 157 L307 155 L313 154 L319 154 L324 154 L330 155 L335 157 L340 159 L344 161 L349 163 L353 165 L357 166 L362 167 L368 167 L375 168 L381 169 L387 171 L393 174 L397 177 L400 182 L400 186 L399 191 L397 196Z\" stroke-opacity=\"0.50\"/><path d=\"M427 200 L421 206 L416 211 L412 216 L409 221 L407 226 L406 231 L404 237 L403 244 L399 250 L395 256 L389 261 L382 265 L374 268 L366 270 L357 272 L348 273 L339 275 L330 276 L321 277 L311 277 L302 276 L292 275 L284 271 L277 267 L271 261 L268 254 L266 246 L265 239 L265 233 L265 227 L264 222 L261 218 L256 214 L250 210 L243 206 L235 200 L229 194 L224 187 L222 179 L222 172 L226 165 L231 159 L238 154 L246 149 L255 146 L263 143 L271 139 L279 137 L287 134 L295 131 L304 130 L313 129 L321 130 L330 131 L338 134 L345 137 L352 140 L359 144 L365 146 L372 148 L380 149 L389 150 L398 151 L408 153 L418 156 L426 160 L433 165 L437 172 L438 179 L436 187 L432 194Z\" stroke-opacity=\"0.45\"/><path d=\"M460 200 L453 208 L446 215 L440 221 L436 228 L433 235 L432 242 L430 251 L428 259 L424 267 L418 275 L410 282 L400 287 L389 292 L378 295 L366 297 L354 299 L342 300 L330 302 L317 303 L305 304 L292 303 L279 301 L268 296 L258 290 L251 282 L246 272 L243 262 L243 253 L243 244 L243 236 L241 230 L237 224 L231 219 L222 214 L212 207 L202 200 L194 191 L187 182 L184 172 L185 162 L190 153 L197 145 L207 138 L217 132 L229 127 L240 123 L251 118 L261 115 L272 111 L283 108 L295 106 L307 105 L318 105 L330 107 L341 111 L351 115 L360 120 L368 124 L377 127 L386 130 L397 131 L409 132 L422 134 L435 136 L448 140 L460 146 L469 153 L474 162 L475 172 L473 182 L467 191Z\" stroke-opacity=\"0.40\"/><path d=\"M494 200 L484 210 L475 218 L468 227 L463 235 L460 244 L458 253 L456 264 L453 274 L448 285 L440 295 L430 303 L418 310 L405 315 L390 319 L375 322 L360 324 L345 326 L330 328 L314 330 L298 330 L282 330 L266 326 L252 321 L239 313 L230 303 L224 291 L221 278 L220 266 L221 255 L220 246 L218 238 L213 231 L205 224 L194 217 L182 209 L169 200 L158 189 L150 177 L147 165 L148 152 L153 141 L163 131 L175 122 L188 114 L202 108 L217 103 L230 97 L244 93 L257 88 L271 84 L286 81 L301 80 L316 81 L330 84 L344 88 L356 93 L368 99 L378 104 L389 108 L401 111 L414 113 L429 115 L445 117 L463 120 L479 125 L493 132 L504 141 L511 153 L512 165 L509 177 L503 189Z\" stroke-opacity=\"0.35\"/><path d=\"M527 200 L516 212 L505 222 L497 232 L491 242 L487 253 L484 264 L482 277 L478 289 L472 302 L463 314 L451 324 L436 332 L420 339 L402 343 L385 347 L367 350 L348 352 L330 354 L311 356 L292 357 L272 356 L253 352 L236 346 L221 336 L210 324 L203 309 L199 294 L198 280 L198 266 L198 255 L195 245 L189 237 L180 229 L167 221 L152 211 L136 200 L123 187 L114 173 L109 157 L111 143 L117 129 L129 116 L143 106 L159 97 L176 89 L193 83 L210 76 L226 70 L242 65 L259 60 L277 57 L295 56 L313 57 L330 60 L346 65 L361 72 L375 78 L388 85 L401 90 L416 93 L431 96 L449 98 L469 100 L490 103 L510 109 L527 118 L540 129 L548 143 L550 158 L546 173 L538 187Z\" stroke-opacity=\"0.30\"/><path d=\"M561 200 L547 214 L535 226 L525 238 L518 249 L513 262 L511 275 L508 290 L503 305 L496 319 L485 333 L471 345 L454 355 L435 362 L415 368 L394 372 L373 375 L352 378 L330 381 L308 383 L285 384 L262 383 L240 378 L220 371 L202 359 L189 345 L181 328 L177 310 L175 293 L176 278 L175 264 L172 253 L165 243 L154 234 L139 224 L121 213 L104 200 L88 185 L77 168 L72 150 L73 133 L81 116 L94 102 L111 90 L130 79 L150 71 L170 63 L189 55 L208 48 L228 42 L247 36 L268 33 L289 31 L310 32 L330 36 L349 42 L367 50 L383 58 L398 65 L414 71 L430 75 L449 78 L470 80 L493 83 L517 87 L540 94 L560 104 L576 117 L585 133 L587 150 L583 168 L573 185Z\" stroke-opacity=\"0.25\"/><path d=\"M594 200 L579 216 L565 230 L553 243 L545 256 L540 271 L537 286 L533 303 L528 320 L520 337 L508 353 L492 366 L472 377 L450 386 L427 392 L403 397 L379 400 L355 404 L330 407 L305 409 L278 411 L252 409 L227 404 L204 395 L184 382 L169 366 L159 347 L154 327 L153 307 L153 289 L153 274 L149 261 L141 249 L128 239 L111 228 L91 215 L71 200 L53 183 L40 163 L34 143 L36 123 L45 104 L60 88 L79 74 L101 62 L124 52 L147 43 L169 34 L191 26 L213 19 L235 13 L259 8 L283 6 L307 8 L330 12 L352 19 L372 28 L391 37 L408 45 L426 52 L445 57 L466 60 L490 63 L516 66 L544 71 L571 79 L594 90 L611 105 L622 123 L624 143 L620 163 L609 182Z\" stroke-opacity=\"0.20\"/><path d=\"M578 90 L579 91 L580 93 L581 94 L582 96 L581 97 L581 99 L579 100 L578 101 L576 101 L574 102 L572 102 L570 103 L569 103 L567 104 L565 104 L563 104 L562 104 L560 104 L558 104 L557 104 L555 103 L554 102 L553 101 L551 101 L550 100 L549 100 L547 99 L545 99 L543 99 L541 98 L540 97 L538 96 L538 94 L538 93 L538 91 L539 90 L540 89 L542 88 L543 87 L544 86 L545 85 L545 84 L546 83 L546 82 L547 80 L547 79 L548 78 L549 77 L551 76 L553 75 L554 75 L556 75 L558 75 L560 75 L562 75 L564 75 L566 75 L567 75 L569 76 L571 76 L572 77 L573 79 L574 80 L574 81 L574 83 L574 84 L574 85 L574 86 L574 87 L575 88 L576 89Z\" stroke-opacity=\"0.45\"/><path d=\"M604 90 L608 93 L611 96 L613 100 L614 104 L614 108 L612 111 L609 114 L604 117 L600 119 L595 120 L590 121 L586 122 L581 123 L577 124 L573 125 L569 126 L564 126 L560 126 L556 125 L552 124 L548 122 L545 121 L541 119 L538 117 L535 116 L531 115 L527 114 L523 113 L518 111 L513 109 L509 107 L506 104 L504 101 L504 97 L505 93 L507 90 L510 87 L514 84 L517 82 L520 80 L522 77 L524 75 L525 72 L525 69 L526 66 L528 63 L530 59 L533 57 L537 55 L541 53 L546 52 L551 52 L555 51 L560 51 L565 52 L569 52 L574 52 L579 53 L583 54 L587 56 L591 58 L593 61 L595 65 L596 68 L596 72 L595 75 L595 78 L595 81 L596 83 L598 85 L601 87Z\" stroke-opacity=\"0.38\"/><path d=\"M631 90 L636 95 L641 100 L645 106 L646 113 L646 119 L643 124 L638 129 L631 133 L624 136 L616 138 L609 140 L601 141 L594 143 L587 144 L581 146 L574 147 L567 147 L560 147 L553 146 L547 144 L541 142 L535 139 L530 136 L525 133 L520 131 L514 129 L507 128 L500 126 L493 124 L485 121 L478 117 L473 113 L471 107 L470 101 L472 96 L476 90 L481 85 L486 81 L492 77 L496 73 L499 70 L502 66 L503 61 L505 57 L506 51 L509 46 L512 41 L517 37 L523 33 L530 31 L537 29 L545 29 L552 28 L560 28 L567 29 L575 29 L582 30 L590 31 L597 33 L604 35 L609 39 L614 44 L616 50 L617 55 L617 61 L617 66 L616 71 L616 75 L618 79 L621 82 L625 86Z\" stroke-opacity=\"0.31\"/><path d=\"M657 90 L665 97 L672 104 L677 113 L679 121 L678 130 L674 137 L667 144 L658 149 L648 153 L637 156 L627 159 L617 161 L607 163 L598 165 L589 167 L579 168 L570 169 L560 169 L551 167 L542 164 L534 161 L526 157 L519 153 L512 150 L505 147 L497 144 L488 142 L478 140 L467 137 L457 133 L448 128 L441 121 L437 114 L436 106 L439 98 L444 90 L451 83 L459 77 L466 72 L472 67 L477 62 L480 57 L482 51 L484 44 L486 37 L490 30 L495 23 L501 17 L509 12 L519 9 L529 7 L539 5 L550 5 L560 5 L570 5 L581 6 L591 7 L601 8 L611 11 L620 15 L628 20 L634 27 L637 34 L639 42 L639 50 L638 58 L637 64 L638 70 L640 75 L644 79 L650 84Z\" stroke-opacity=\"0.24\"/><path d=\"M684 90 L693 98 L702 108 L709 119 L711 130 L710 140 L705 150 L696 159 L685 165 L672 170 L658 174 L645 177 L632 180 L620 183 L608 185 L596 188 L584 189 L572 190 L560 190 L548 188 L537 185 L526 180 L517 175 L508 170 L499 166 L490 162 L480 159 L468 156 L455 153 L442 150 L429 145 L417 138 L409 130 L404 120 L403 110 L406 100 L412 90 L421 81 L431 74 L440 67 L448 61 L454 54 L458 48 L461 40 L463 31 L466 22 L470 13 L477 4 L485 -3 L496 -9 L508 -14 L520 -16 L534 -18 L547 -18 L560 -18 L573 -18 L586 -17 L599 -16 L612 -14 L625 -11 L637 -6 L646 1 L654 10 L658 19 L660 29 L660 39 L659 49 L658 57 L659 64 L661 70 L667 76 L674 83Z\" stroke-opacity=\"0.17\"/></g><path d=\"M170 330 C240 300 280 240 330 200 S 500 120 560 92\" fill=\"none\" stroke=\"#ffffff\" stroke-opacity=\".6\" stroke-width=\"2\" stroke-dasharray=\"6 8\"/><g transform=\"translate(330 200)\"><circle r=\"16\" fill=\"#3ee0c0\" opacity=\".12\" class=\"pulse\"/><circle r=\"4.5\" fill=\"#3ee0c0\"/></g><g transform=\"translate(560 92)\"><circle r=\"16\" fill=\"#3ee0c0\" opacity=\".12\" class=\"pulse\"/><circle r=\"4.5\" fill=\"#3ee0c0\"/></g><g transform=\"translate(170 330)\"><circle r=\"16\" fill=\"#3ee0c0\" opacity=\".12\" class=\"pulse\"/><circle r=\"4.5\" fill=\"#3ee0c0\"/></g></svg>"},
+  budget: {"land": "<svg class=\"ridge r1\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"xMidYMax slice\" aria-hidden=\"true\"><rect x=\"60\" y=\"286\" width=\"36\" height=\"44\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"136\" y=\"287\" width=\"36\" height=\"43\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"212\" y=\"262\" width=\"36\" height=\"68\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"288\" y=\"270\" width=\"36\" height=\"60\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"364\" y=\"268\" width=\"36\" height=\"62\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"440\" y=\"241\" width=\"36\" height=\"89\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"516\" y=\"203\" width=\"36\" height=\"127\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"592\" y=\"203\" width=\"36\" height=\"127\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"668\" y=\"198\" width=\"36\" height=\"132\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"744\" y=\"224\" width=\"36\" height=\"106\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"820\" y=\"198\" width=\"36\" height=\"132\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"896\" y=\"206\" width=\"36\" height=\"124\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"972\" y=\"206\" width=\"36\" height=\"124\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"1048\" y=\"203\" width=\"36\" height=\"127\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"1124\" y=\"189\" width=\"36\" height=\"141\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"1200\" y=\"139\" width=\"36\" height=\"191\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"1276\" y=\"138\" width=\"36\" height=\"192\" rx=\"6\" fill=\"url(#bar)\"/><rect x=\"1352\" y=\"133\" width=\"36\" height=\"197\" rx=\"6\" fill=\"url(#bar)\"/><path d=\"M78 246 L154 247 L230 222 L306 230 L382 228 L458 201 L534 163 L610 163 L686 158 L762 184 L838 158 L914 166 L990 166 L1066 163 L1142 149 L1218 99 L1294 98 L1370 93\" fill=\"none\" stroke=\"#fff1c9\" stroke-opacity=\".8\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><circle cx=\"306\" cy=\"230\" r=\"3.5\" fill=\"#c6ffe4\"/><circle cx=\"686\" cy=\"158\" r=\"3.5\" fill=\"#c6ffe4\"/><circle cx=\"1066\" cy=\"163\" r=\"3.5\" fill=\"#c6ffe4\"/></svg><svg class=\"ridge r2\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"var(--stage-floor)\" d=\"M0 260 L120 215 L230 250 L340 200 L470 245 L600 205 L720 250 L860 210 L990 255 L1120 215 L1260 250 L1440 220 L1440 320 L0 320Z\"/></svg>", "deco": "<svg class=\"deco coins\" viewBox=\"0 0 600 340\" aria-hidden=\"true\"><g fill=\"none\" stroke=\"#ffd27a\" stroke-opacity=\".25\"><circle cx=\"330\" cy=\"170\" r=\"150\"/><circle cx=\"330\" cy=\"170\" r=\"210\" stroke-dasharray=\"3 7\"/></g><g transform=\"translate(330 170)\" opacity=\"0.95\"><circle r=\"62\" fill=\"url(#coin)\" stroke=\"#ffe39a\" stroke-opacity=\".7\" stroke-width=\"1.5\"/><circle r=\"48\" fill=\"none\" stroke=\"#ffe39a\" stroke-opacity=\".45\" stroke-dasharray=\"2 4\"/><text y=\"22\" text-anchor=\"middle\" font-size=\"62\" font-weight=\"700\" fill=\"#fff3c4\" fill-opacity=\".9\" font-family=\"-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif\">$</text></g><g transform=\"translate(470 90)\" opacity=\"0.7\"><circle r=\"30\" fill=\"url(#coin)\" stroke=\"#ffe39a\" stroke-opacity=\".7\" stroke-width=\"1.5\"/><circle r=\"23\" fill=\"none\" stroke=\"#ffe39a\" stroke-opacity=\".45\" stroke-dasharray=\"2 4\"/><text y=\"11\" text-anchor=\"middle\" font-size=\"30\" font-weight=\"700\" fill=\"#fff3c4\" fill-opacity=\".9\" font-family=\"-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif\">$</text></g><g transform=\"translate(200 280)\" opacity=\"0.55\"><circle r=\"24\" fill=\"url(#coin)\" stroke=\"#ffe39a\" stroke-opacity=\".7\" stroke-width=\"1.5\"/><circle r=\"19\" fill=\"none\" stroke=\"#ffe39a\" stroke-opacity=\".45\" stroke-dasharray=\"2 4\"/><text y=\"9\" text-anchor=\"middle\" font-size=\"24\" font-weight=\"700\" fill=\"#fff3c4\" fill-opacity=\".9\" font-family=\"-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif\">$</text></g><g transform=\"translate(520 250)\" opacity=\"0.5\"><circle r=\"16\" fill=\"url(#coin)\" stroke=\"#ffe39a\" stroke-opacity=\".7\" stroke-width=\"1.5\"/><circle r=\"12\" fill=\"none\" stroke=\"#ffe39a\" stroke-opacity=\".45\" stroke-dasharray=\"2 4\"/><text y=\"6\" text-anchor=\"middle\" font-size=\"16\" font-weight=\"700\" fill=\"#fff3c4\" fill-opacity=\".9\" font-family=\"-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif\">$</text></g></svg>"},
+  packing: {"land": "<svg class=\"ridge r1\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"xMidYMax slice\" aria-hidden=\"true\"><path fill=\"url(#hill)\" d=\"M0 220 C200 170 360 200 520 190 C700 178 860 150 1040 180 C1200 205 1320 170 1440 185 L1440 320 L0 320Z\"/><g fill=\"#0b0f1f\"><path d=\"M80 120.60571852085344 L105 180 L93 180 L112 229 L48 229 L67 180 L55 180Z\"/><path d=\"M150 132.2751246402299 L172 185 L161 185 L178 228 L122 228 L139 185 L128 185Z\"/><path d=\"M210 154.65017397015478 L227 194 L219 194 L231 227 L189 227 L201 194 L193 194Z\"/><path d=\"M1120 167.5196608755053 L1136 206 L1128 206 L1141 238 L1099 238 L1112 206 L1104 206Z\"/><path d=\"M1190 150.74573308224547 L1209 196 L1200 196 L1214 234 L1166 234 L1180 196 L1171 196Z\"/><path d=\"M1260 146.68845447919884 L1280 193 L1270 193 L1285 231 L1235 231 L1250 193 L1240 193Z\"/><path d=\"M1330 126.78070642526359 L1353 183 L1342 183 L1360 228 L1300 228 L1318 183 L1307 183Z\"/><path d=\"M1400 155.3656395068018 L1417 195 L1408 195 L1421 227 L1379 227 L1392 195 L1383 195Z\"/></g><g transform=\"translate(860 236)\"><path d=\"M-90 0 L0 -96 L90 0Z\" fill=\"#101629\"/><path d=\"M-90 0 L0 -96 L90 0\" fill=\"none\" stroke=\"#ffb86b\" stroke-opacity=\".35\" stroke-width=\"2\"/><path d=\"M-26 0 L0 -50 L26 0Z\" fill=\"#ffb54d\"/><ellipse cx=\"0\" cy=\"2\" rx=\"70\" ry=\"8\" fill=\"#ffb54d\" opacity=\".18\"/></g></svg><svg class=\"ridge r2\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"var(--stage-floor)\" d=\"M0 260 L120 215 L230 250 L340 200 L470 245 L600 205 L720 250 L860 210 L990 255 L1120 215 L1260 250 L1440 220 L1440 320 L0 320Z\"/></svg>", "deco": "<svg class=\"deco compass\" viewBox=\"0 0 400 400\" aria-hidden=\"true\"><g fill=\"none\" stroke=\"#ffe0c2\"><circle cx=\"200\" cy=\"200\" r=\"150\" stroke-opacity=\".45\" stroke-width=\"1.5\"/><circle cx=\"200\" cy=\"200\" r=\"128\" stroke-opacity=\".3\" stroke-dasharray=\"2 6\"/><circle cx=\"200\" cy=\"200\" r=\"185\" stroke-opacity=\".18\"/></g><path d=\"M200 70 L222 200 L200 330 L178 200Z\" fill=\"#ffe0c2\" fill-opacity=\".18\" stroke=\"#ffe0c2\" stroke-opacity=\".5\"/><path d=\"M200 70 L222 200 L178 200Z\" fill=\"#ff9a6b\" fill-opacity=\".75\"/><path d=\"M70 200 L200 186 L330 200 L200 214Z\" fill=\"#ffe0c2\" fill-opacity=\".12\" stroke=\"#ffe0c2\" stroke-opacity=\".35\"/><circle cx=\"200\" cy=\"200\" r=\"6\" fill=\"#ffe0c2\"/><g font-family=\"-apple-system,Helvetica,Arial,sans-serif\" font-size=\"20\" font-weight=\"700\" fill=\"#ffe0c2\" fill-opacity=\".7\" text-anchor=\"middle\"><text x=\"200\" y=\"40\">N</text><text x=\"200\" y=\"376\">S</text><text x=\"372\" y=\"207\">E</text><text x=\"28\" y=\"207\">W</text></g><path d=\"M318 58 a26 26 0 1 0 22 40 a20 20 0 1 1 -22 -40z\" fill=\"#fff3e0\" fill-opacity=\".85\"/></svg>"},
+  info: {"land": "<svg class=\"ridge r1\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"url(#rgInfo)\" d=\"M0 230 L90 180 L150 205 L250 120 L320 165 L410 85 L470 130 L520 110 L610 175 L700 120 L790 160 L880 55 L950 125 L1050 95 L1130 160 L1230 105 L1330 150 L1440 115 L1440 320 L0 320Z\"/></svg><svg class=\"ridge r2\" viewBox=\"0 0 1440 320\" preserveAspectRatio=\"none\" aria-hidden=\"true\"><path fill=\"var(--stage-floor)\" d=\"M0 260 L120 215 L230 250 L340 200 L470 245 L600 205 L720 250 L860 210 L990 255 L1120 215 L1260 250 L1440 220 L1440 320 L0 320Z\"/></svg>", "deco": "<svg class=\"deco globe\" viewBox=\"0 0 500 500\" aria-hidden=\"true\"><circle cx=\"250\" cy=\"250\" r=\"200\" fill=\"url(#glb)\"/><g fill=\"none\" stroke=\"#9fd8ff\" stroke-opacity=\".28\" stroke-width=\"1.2\"><ellipse cx=\"250\" cy=\"250\" rx=\"193\" ry=\"200\"/><ellipse cx=\"250\" cy=\"250\" rx=\"173\" ry=\"200\"/><ellipse cx=\"250\" cy=\"250\" rx=\"141\" ry=\"200\"/><ellipse cx=\"250\" cy=\"250\" rx=\"100\" ry=\"200\"/><ellipse cx=\"250\" cy=\"250\" rx=\"52\" ry=\"200\"/><ellipse cx=\"250\" cy=\"440\" rx=\"62\" ry=\"11\"/><ellipse cx=\"250\" cy=\"412\" rx=\"118\" ry=\"21\"/><ellipse cx=\"250\" cy=\"368\" rx=\"162\" ry=\"29\"/><ellipse cx=\"250\" cy=\"312\" rx=\"190\" ry=\"34\"/><ellipse cx=\"250\" cy=\"250\" rx=\"200\" ry=\"36\"/><ellipse cx=\"250\" cy=\"188\" rx=\"190\" ry=\"34\"/><ellipse cx=\"250\" cy=\"132\" rx=\"162\" ry=\"29\"/><ellipse cx=\"250\" cy=\"88\" rx=\"118\" ry=\"21\"/><ellipse cx=\"250\" cy=\"60\" rx=\"62\" ry=\"11\"/><path d=\"M250 50 V450\"/></g><circle cx=\"250\" cy=\"250\" r=\"200\" fill=\"none\" stroke=\"#9fd8ff\" stroke-opacity=\".55\" stroke-width=\"1.5\"/><ellipse cx=\"250\" cy=\"250\" rx=\"245\" ry=\"70\" fill=\"none\" stroke=\"#c6ffe4\" stroke-opacity=\".45\" stroke-dasharray=\"4 8\" transform=\"rotate(-18 250 250)\"/><g transform=\"translate(372 318)\"><circle r=\"16\" fill=\"#3ee0c0\" opacity=\".18\" class=\"pulse\"/><circle r=\"5\" fill=\"#3ee0c0\"/></g><g transform=\"translate(176 176)\"><circle r=\"4\" fill=\"#ffd479\"/></g><path d=\"M176 176 Q300 170 372 318\" fill=\"none\" stroke=\"#ffd479\" stroke-opacity=\".6\" stroke-dasharray=\"3 6\"/></svg>"},
+};
+const SVGDEFS = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="rg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a4a63"/><stop offset="1" stop-color="#0c1724"/></linearGradient><linearGradient id="ringg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ac8fa"/><stop offset="1" stop-color="#a78bfa"/></linearGradient><linearGradient id="rgMap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d5a5a"/><stop offset="1" stop-color="#07191c"/></linearGradient><linearGradient id="rgInfo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26406e"/><stop offset="1" stop-color="#0a1226"/></linearGradient><linearGradient id="cl1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6d7fc4" stop-opacity=".55"/><stop offset="1" stop-color="#1b2250" stop-opacity=".9"/></linearGradient><linearGradient id="cl2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9b6ea" stop-opacity=".5"/><stop offset="1" stop-color="#2a3370"/></linearGradient><linearGradient id="bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc24d" stop-opacity=".8"/><stop offset="1" stop-color="#5a3d0c" stop-opacity=".15"/></linearGradient><linearGradient id="coin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd76a" stop-opacity=".35"/><stop offset="1" stop-color="#b8862c" stop-opacity=".12"/></linearGradient><linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2244"/><stop offset="1" stop-color="#0e0f20"/></linearGradient><radialGradient id="glb" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#2b6cb0" stop-opacity=".45"/><stop offset="1" stop-color="#0b1f4a" stop-opacity=".15"/></radialGradient></defs></svg>`;
+function ringSVG(frac, size){ const C = 163.36; return `<svg class="ring" viewBox="0 0 64 64" aria-hidden="true" ${size ? `style="width:${size}px;height:${size}px"` : ""}><circle cx="32" cy="32" r="26" class="ring-bg"/>${frac > 0.005 ? `<circle cx="32" cy="32" r="26" class="ring-fg" stroke="url(#ringg)" stroke-dasharray="${(Math.min(frac,1)*C).toFixed(2)} ${C}" transform="rotate(-90 32 32)"/>` : ""}</svg>`; }
+function stageHTML(o){
+  return `<section class="stage th-${o.theme || view} ${o.hero ? "" : "compact"} ${o.cls || ""}" id="stage"><div class="sky" aria-hidden="true"><i class="aur a1"></i><i class="aur a2"></i><i class="aur a3"></i><div class="stars"></div>${(STAGE_ART[o.theme || view] || STAGE_ART.trip).deco}</div>${(STAGE_ART[o.theme || view] || STAGE_ART.trip).land}
+    <div class="stage-in" id="stage-in">
+      <div class="stage-top"><span class="kicker">${o.kicker}</span><div class="row">${o.actions || ""}<button class="iconbtn glassicon" data-act="settings" aria-label="设置与备份">${I.gear}</button></div></div>
+      <h1 class="mega">${o.title}</h1>
+      ${o.lede ? `<p class="lede">${o.lede}</p>` : ""}
+      ${o.side ? `<div class="stage-split"><div>${o.big || ""}</div>${o.side}</div>` : (o.big || "")}
+      ${o.tiles ? `<div class="glass-grid g${o.tilesN || "h"}">${o.tiles}</div>` : ""}
+    </div></section>`;
+}
+const bigNum = (num, unit, count, fmt) => `<div class="countdown"><span class="cd-num num" ${count != null ? `data-count="${count}"` : ""} ${fmt ? `data-fmt="${fmt}"` : ""}>${num}</span>${unit ? `<span class="cd-unit">${unit}</span>` : ""}</div>`;
+const tile = (k, n, sub, extra = "") => `<div class="glass ${extra}"><div class="gl-k">${k}</div><div class="gl-n num">${n}</div>${sub ? `<div class="gl-s">${sub}</div>` : ""}</div>`;
+function headerHTML(title, sub, actions, noEyebrow){
+  return `<header class="top"><div>${noEyebrow ? "" : `<div class="eyebrow">${esc(S.meta.name || "我的旅行")}</div>`}<h1>${title}</h1>${sub ? `<div class="sub">${sub}</div>` : ""}</div><div class="acts-top">${actions || ""}<button class="iconbtn mobile-only" data-act="settings" aria-label="设置与备份" style="color:var(--muted)">${I.gear}</button></div></header>`;
+}
+function exampleBanner(){
+  return hasExamples() ? `<div class="banner"><span>现在看到的是示例行程，方便你看看各功能怎么用。可以直接改，也可以一键清掉后填自己的。</span><button class="btn sm" data-act="clear-examples">清除示例</button></div>` : "";
+}
+
+function viewTrip(){
+  const days = tripDays();
+  const s = parseDate(S.meta.start), e = parseDate(S.meta.end);
+  const today = new Date(); today.setHours(0,0,0,0);
+  let cdNum = "", cdUnit = "";
+  if(s){
+    const until = dayDiff(today, s);
+    if(until > 0){ cdNum = until; cdUnit = "天后出发"; }
+    else if(e && dayDiff(today, e) >= 0){ cdNum = 1 - until; cdUnit = "旅行第几天"; }
+    else { cdNum = ""; cdUnit = "旅行已结束"; }
+  }
+  const range = s ? `${fmtDate(s)} ${WD[s.getDay()]}${e ? ` — ${fmtDate(e)} ${WD[e.getDay()]} · 共 ${dayDiff(s,e)+1} 天` : ""}` : `还没设置日期，<a href="#" data-act="settings">去设置</a>`;
+  const nextBk = S.bookings.filter(b => b.start && new Date(b.start.replace(" ","T")) >= today).sort((a,b) => a.start.localeCompare(b.start))[0];
+  const spentSGD = S.expenses.reduce((t,x) => t + toSGD(x.amount, x.currency), 0) + S.bookings.reduce((t,b) => t + toSGD(b.cost, b.currency), 0);
+  const unplanned = S.places.filter(p => !(Number(p.day) > 0));
+  const budgetSGD = toSGD(S.meta.budget, S.meta.budgetCur || "SGD");
+  const pct = budgetSGD ? spentSGD / budgetSGD : 0;
+  let html = stageHTML({hero:true, kicker:"NEW ZEALAND · 自驾旅行", title:esc(S.meta.name || "我的旅行"), lede:range,
+    actions:`<button class="btn glassbtn sm" data-act="add-place" data-day="0">${I.plus}添加景点</button>`,
+    big: cdUnit ? bigNum(cdNum, cdUnit, cdNum) : "",
+    tiles: `<div class="glass wide">${nextBk ? `<div class="gl-k">下一项预订</div><div class="gl-t">${esc(nextBk.title)}</div><div class="gl-s">${fmtDT(nextBk.start)}${nextBk.confirm ? ` · <button class="code glasscode" data-copy="${esc(nextBk.confirm)}">${esc(nextBk.confirm)}</button>` : ""}</div>` : `<div class="gl-k">下一项预订</div><div class="gl-s">还没有预订。去“预订”里添加机票、酒店和租车。</div>`}</div>
+        <div class="glass"><div class="gl-k">行程</div><div class="gl-n num"><span data-count="${days.length}">${days.length}</span><small>天</small></div><div class="gl-s">${S.places.length} 个景点 · ${S.bookings.length} 项预订</div></div>
+        <a class="glass ringtile" href="#budget">${ringSVG(pct)}<div><div class="gl-k">已花费</div><div class="gl-n num">${money(spentSGD,"SGD").replace(/\.\d+$/,"")}</div><div class="gl-s">${budgetSGD ? `预算的 ${Math.round(pct*100)}%` : "还没设预算"}</div></div></a>`});
+  html += exampleBanner();
+  html += `<div class="sec-head"><h2 class="grad">每日行程</h2><a href="#map" data-go="map" class="more">在地图上看 ›</a></div>`;
+
+  days.forEach(d => {
+    const items = [];
+    S.bookings.forEach(b => {
+      if(b.start && dayOfDate(b.start) === d.n) items.push({t:b.start.slice(11,16), html:bookingItem(b, "start")});
+      if(b.end && b.type !== "hotel" && b.end.slice(0,10) !== (b.start||"").slice(0,10) && dayOfDate(b.end) === d.n) items.push({t:b.end.slice(11,16), html:bookingItem(b, "end")});
+      if(b.type === "hotel" && b.end && dayOfDate(b.end) === d.n) items.push({t:b.end.slice(11,16) || "10:00", html:bookingItem(b, "checkout")});
+    });
+    sortPlaces(S.places.filter(p => Number(p.day) === d.n)).forEach(p => items.push({t:p.time || "", html:placeItem(p)}));
+    items.sort((a,b) => (a.t || "99:99").localeCompare(b.t || "99:99"));
+    const night = hotelForNight(d.date);
+    const pts = sortPlaces(S.places.filter(p => Number(p.day) === d.n && coordsOf(p)));
+    const routeLink = pts.length ? dayRouteUrl(pts, night) : "";
+    const theme = (S.meta.dayTitles || {})[d.n];
+    html += `<section class="day" id="day-${d.n}"><div class="dayhead"><div class="daynum" style="background:${dayColor(d.n)}">${d.n}</div><div class="grow"><h3>第 ${d.n} 天${d.date ? ` · ${fmtDate(d.date)} ${WD[d.date.getDay()]}` : ""}</h3><button class="daytheme ${theme ? "" : "add"}" data-act="day-theme" data-day="${d.n}">${theme ? esc(theme) : "＋ 写这天的主题"}</button></div><button class="btn ghost sm" data-act="map-day" data-day="${d.n}">${I.map}<span class="mobile-hide">看地图</span></button></div>
+      <ul class="items">${items.length ? items.map(x => x.html).join("") : `<li class="it static"><div class="t"></div><div class="node empty-node"></div><div class="main"><div class="empty">这天还空着，点下面的“景点”添加</div></div><div></div></li>`}${night ? nightItem(night) : ""}</ul>
+      <div class="dayfoot"><button class="btn sm" data-act="add-place" data-day="${d.n}">${I.plus}景点</button>${routeLink ? `<a class="btn sm" href="${routeLink}" target="_blank" rel="noopener">${I.nav}整天路线导航</a>` : ""}</div></section>`;
+  });
+  html += `<section class="day"><div class="dayhead"><div class="daynum" style="background:${dayColor(0)}">?</div><div class="grow"><h3>想去，还没排进哪一天</h3><div class="sub">点景点，在“哪一天”里选一天就能排进去</div></div></div><ul class="items">${unplanned.length ? unplanned.map(p => placeItem(p)).join("") : `<li class="it static"><div class="t"></div><div class="node empty-node"></div><div class="main"><div class="empty">把还没决定的景点放这里</div></div><div></div></li>`}</ul><div class="dayfoot"><button class="btn sm" data-act="add-place" data-day="0">${I.plus}景点</button></div></section>`;
+  return html;
+}
+function dayRouteUrl(pts, night){
+  const list = pts.map(p => coordsOf(p).join(","));
+  if(night && coordsOf(night)) list.push(coordsOf(night).join(","));
+  const dest = list.pop(); const wps = list.slice(0, 9);
+  return `https://www.google.com/maps/dir/?api=1&destination=${dest}${wps.length ? "&waypoints=" + encodeURIComponent(wps.join("|")) : ""}&travelmode=driving`;
+}
+const NODE_COL = {flight:"#0a84ff", hotel:"#5e5ce6", car:"#30b0c7", ferry:"#30b0c7", activity:"#34c759", other:"#8e8e93", sight:"#ff9f0a", hike:"#34c759", food:"#ff6b4a", drive:"#30b0c7"};
+function tlRow({act, id, time, label, icon, color, title, meta, tags, acts, cls}){
+  return `<li class="it ${cls || ""}" ${act ? `data-act="${act}" data-id="${id}"` : ""}>
+    <div class="t">${time ? `<b class="num">${esc(time)}</b>` : ""}${label ? `<span>${label}</span>` : ""}</div>
+    <div class="node" style="--c:${color}">${icon}</div>
+    <div class="main"><div class="name">${title}</div>${meta ? `<div class="meta">${meta}</div>` : ""}${tags ? `<div class="tags">${tags}</div>` : ""}</div>
+    <div class="acts">${acts || ""}</div></li>`;
+}
+function placeItem(p){
+  const cat = PL_CATS[p.category] || PL_CATS.other;
+  return tlRow({act:"edit-place", id:p.id, time:p.time, label:cat[0], icon:I[cat[1]], color:NODE_COL[p.category] || NODE_COL.other, cls:p.done ? "done" : "",
+    title:esc(p.name), meta:p.notes ? esc(p.notes) : "",
+    tags:[p.duration ? `<span class="tag">${I.clock}约 ${esc(p.duration)}</span>` : "", p.done ? `<span class="tag ok">${I.check}去过了</span>` : ""].join(""),
+    acts:`<button class="iconbtn desk" title="${p.done ? "标为未完成" : "标为去过了"}" data-act="toggle-done" data-id="${p.id}" ${p.done ? 'style="color:var(--ok)"' : ""}>${I.check}</button><a class="iconbtn" title="导航" href="${navUrl(p)}" target="_blank" rel="noopener">${I.nav}</a>`});
+}
+function bookingItem(b, phase){
+  const t = BK_TYPES[b.type] || BK_TYPES.other;
+  const isEnd = phase !== "start";
+  const label = phase === "checkout" ? "退房" : phase === "end" ? (b.type === "car" ? "还车" : "到达") : ({hotel:"入住", car:"取车", flight:"起飞", ferry:"出发", activity:"活动"}[b.type] || t[0]);
+  const time = isEnd ? (b.end||"").slice(11,16) : (b.start||"").slice(11,16);
+  const loc = isEnd && b.location2 ? b.location2 : b.location;
+  const navTarget = isEnd && b.location2 ? {name:b.location2} : b;
+  const canNav = isEnd && b.location2 ? true : (b.location || coordsOf(b));
+  return tlRow({act:"edit-booking", id:b.id, time, label, icon:I[t[1]], color:NODE_COL[b.type] || NODE_COL.other,
+    title:esc(b.title), meta:loc ? `${I.pin}${esc(loc)}` : "",
+    tags: b.confirm && !isEnd ? `<button class="tag code-tag" data-copy="${esc(b.confirm)}" title="点一下复制">${I.ticket}${esc(b.confirm)}</button>` : "",
+    acts: canNav ? `<a class="iconbtn" title="导航" href="${navUrl(navTarget)}" target="_blank" rel="noopener">${I.nav}</a>` : ""});
+}
+function nightItem(h){
+  return tlRow({act:"edit-booking", id:h.id, time:"", label:"过夜", icon:I.moon, color:"#5e5ce6", cls:"nightrow", title:`今晚住 ${esc(h.title)}`, meta:h.location ? `${I.pin}${esc(h.location)}` : "",
+    acts:(h.location || coordsOf(h)) ? `<a class="iconbtn" title="导航" href="${navUrl(h)}" target="_blank" rel="noopener">${I.nav}</a>` : ""});
+}
+
+let bkFilter = "all";
+function viewBookings(){
+  const nights = S.bookings.filter(b => b.type === "hotel" && b.start && b.end).reduce((t,b) => t + Math.max(0, dayDiff(parseDate(b.start), parseDate(b.end))), 0);
+  const bkTotal = S.bookings.reduce((t,b) => t + toSGD(b.cost, b.currency), 0);
+  const todayD = new Date(); todayD.setHours(0,0,0,0);
+  const nextB = S.bookings.filter(b => b.start && parseDate(b.start) >= todayD).sort((a,b) => a.start.localeCompare(b.start))[0];
+  let html = stageHTML({kicker:"BOOKINGS · 机票与酒店", title:"预订记录", lede:"机票、住宿、租车、门票都在这里，确认号点一下就能复制。",
+    actions:`<button class="btn glassbtn sm" data-act="add-booking">${I.plus}添加预订</button>`,
+    big: bigNum(S.bookings.length, "项预订", S.bookings.length),
+    tiles: `<div class="glass wide"><div class="gl-k">下一项</div>${nextB ? `<div class="gl-t">${esc(nextB.title)}</div><div class="gl-s">${fmtDT(nextB.start)}</div>` : `<div class="gl-s">没有即将到来的预订</div>`}</div>` + tile("住宿", `${nights}<small>晚</small>`, `${S.bookings.filter(b=>b.type==="hotel").length} 家酒店`) + tile("预订总额", money(bkTotal,"SGD").replace(/\.\d+$/,""), "按设置里的汇率换算")});
+  html += exampleBanner();
+  const counts = {}; S.bookings.forEach(b => counts[b.type] = (counts[b.type]||0) + 1);
+  html += `<div class="filters"><button class="chip" data-bkf="all" aria-pressed="${bkFilter==="all"}">全部 ${S.bookings.length}</button>${Object.entries(BK_TYPES).filter(([k]) => counts[k]).map(([k,v]) => `<button class="chip" data-bkf="${k}" aria-pressed="${bkFilter===k}">${v[0]} ${counts[k]}</button>`).join("")}</div>`;
+  const list = S.bookings.filter(b => bkFilter === "all" || b.type === bkFilter).sort((a,b) => (a.start||"9").localeCompare(b.start||"9"));
+  if(!list.length) return html + `<div class="card empty">还没有预订。点“添加预订”，把机票、酒店、租车的时间和确认号记下来。</div>`;
+  const total = list.reduce((t,b) => t + toSGD(b.cost, b.currency), 0);
+  html += `<div class="bk-list">` + list.map(b => {
+    const t = BK_TYPES[b.type] || BK_TYPES.other;
+    const nights = b.type === "hotel" && b.start && b.end ? dayDiff(parseDate(b.start), parseDate(b.end)) : 0;
+    return `<div class="card bk"><div class="ic">${I[t[1]]}</div><div style="min-width:0"><div class="row" style="gap:6px"><h3 style="overflow-wrap:anywhere">${esc(b.title)}</h3><span class="pill">${t[0]}</span></div>
+      <div class="when">${fmtRange(b.start, b.end)}${nights > 0 ? ` · ${nights} 晚` : ""}</div>
+      ${b.location || b.location2 ? `<div class="sub" style="overflow-wrap:anywhere">${esc(b.location || "")}${b.location2 ? ` → ${esc(b.location2)}` : ""}</div>` : ""}
+      <div class="row" style="margin-top:6px">${b.confirm ? `<span class="sub">确认号</span><button class="code" data-copy="${esc(b.confirm)}">${esc(b.confirm)}</button>` : ""}${Number(b.cost) ? `<span class="pill num">${money(b.cost, b.currency)}${b.currency !== "SGD" ? ` ≈ ${money(toSGD(b.cost,b.currency),"SGD")}` : ""}</span>` : ""}</div>
+      ${b.notes ? `<div class="sub" style="margin-top:6px;white-space:pre-wrap;overflow-wrap:anywhere">${esc(b.notes)}</div>` : ""}</div>
+      <div class="acts" style="display:flex;flex-direction:column;gap:2px">${(b.location || coordsOf(b)) ? `<a class="iconbtn" title="导航" href="${navUrl(b)}" target="_blank" rel="noopener">${I.nav}</a>` : ""}<button class="iconbtn" title="编辑" data-act="edit-booking" data-id="${b.id}">${I.edit}</button></div></div>`;
+  }).join("") + `</div><div class="sub num" style="text-align:right">以上预订合计约 ${money(total,"SGD")}</div>`;
+  return html;
+}
+
+/* ---------- map ---------- */
+const LAT0 = -41 * Math.PI / 180, KX = Math.cos(LAT0) * 100, KY = 100;
+const proj = (lat, lng) => [(lng - 166) * KX, (-34 - lat) * KY];
+let mapDay = "all", mapSel = null, vb = null;
+function mapPoints(){
+  const pts = [];
+  S.places.forEach(p => { const c = coordsOf(p); if(c && (mapDay === "all" || Number(p.day) === Number(mapDay))) pts.push({kind:"place", o:p, c, day:Number(p.day)||0}); });
+  {
+    S.bookings.forEach(b => {
+      const c = coordsOf(b); if(!c) return;
+      const d = b.start ? dayOfDate(b.start) : 0;
+      if(mapDay === "all" || (b.type === "hotel" && b.start && b.end && dayOfDate(b.start) <= Number(mapDay) && dayOfDate(b.end) >= Number(mapDay)) || (b.type !== "hotel" && d === Number(mapDay))) pts.push({kind:"booking", o:b, c, day:d});
+    });
+  }
+  return pts;
+}
+function fitVB(pts){
+  if(!pts.length){ const [x0,y0] = proj(-34.2,166.2), [x1,y1] = proj(-47.4,178.7); return [x0, y0, x1-x0, y1-y0]; }
+  let xs = pts.map(p => proj(...p.c)[0]), ys = pts.map(p => proj(...p.c)[1]);
+  let minx = Math.min(...xs), maxx = Math.max(...xs), miny = Math.min(...ys), maxy = Math.max(...ys);
+  let w = Math.max(maxx - minx, 60), h = Math.max(maxy - miny, 60);
+  const cx = (minx+maxx)/2, cy = (miny+maxy)/2; w = w * 1.3 + 70; h = h * 1.3 + 40;
+  return [cx - w/2, cy - h/2, w, h];
+}
+function viewMap(){
+  const days = tripDays();
+  const withC = [...S.places, ...S.bookings].filter(o => coordsOf(o)).length;
+  let km = 0; days.forEach(d => { const pts = sortPlaces(S.places.filter(p => Number(p.day) === d.n && coordsOf(p))).map(coordsOf); for(let k = 1; k < pts.length; k++) km += haversine(pts[k-1], pts[k]); });
+  let html = stageHTML({kicker:"MAP · 南岛路线", title:"地图", lede:"景点按天上色，白色方块是住宿、取车和机场。点任意一个点即可导航。",
+    actions:`<button class="btn glassbtn sm" data-act="add-place" data-day="${mapDay==="all"?0:mapDay}">${I.plus}添加景点</button>`,
+    big: bigNum(withC, "个地点", withC),
+    tiles: tile("规划天数", `${days.length}<small>天</small>`, "") + tile("景点间直线距离", `${Math.round(km)}<small>km</small>`, "实际车程会更长") + tile("未定位", `${S.places.filter(p => !coordsOf(p)).length}<small>个</small>`, "编辑景点可补坐标"), tilesN:3, cls:"withmap"});
+  html += `<div class="filters"><button class="chip" data-mapday="all" aria-pressed="${mapDay==="all"}">全部</button>${days.map(d => `<button class="chip" data-mapday="${d.n}" aria-pressed="${String(mapDay)===String(d.n)}"><i style="background:${dayColor(d.n)}"></i>第${d.n}天</button>`).join("")}</div>`;
+  html += `<div class="mapbox" id="mapbox"><svg id="mapsvg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="mapctl"><button data-zoom="in" aria-label="放大" title="放大">${I.plus}</button><button data-zoom="out" aria-label="缩小" title="缩小">${I.minus}</button><button data-zoom="fit" aria-label="显示全部" title="显示全部">${I.fit}</button></div>
+    <div class="maplegend">拖动平移 · 双指或滚轮缩放 · 位置为大致示意</div></div>`;
+  html += `<div id="mapinfo"></div><div class="card"><div class="plist" id="plist"></div></div>`;
+  const missing = S.places.filter(p => !coordsOf(p)).length;
+  if(missing) html += `<div class="sub">${missing} 个景点还没有坐标，所以没有显示在地图上。编辑它们，点“查找坐标”即可。</div>`;
+  return html;
+}
+function drawMap(resetView){
+  const svg = $("#mapsvg"); if(!svg) return;
+  const pts = mapPoints();
+  if(resetView || !vb) vb = fitVB(pts);
+  const land = NZ.map(r => "M" + r.map(([lng,lat]) => proj(lat,lng).map(v => v.toFixed(1)).join(",")).join("L") + "Z").join("");
+  const scale = Math.max(vb[2] / (svg.clientWidth || 600), vb[3] / (svg.clientHeight || 400));
+  const R = 9 * scale, FS = 12 * scale;
+  let routes = "";
+  const byDay = {};
+  pts.filter(p => p.kind === "place" && p.day > 0).forEach(p => (byDay[p.day] = byDay[p.day] || []).push(p));
+  Object.entries(byDay).forEach(([d, list]) => {
+    const ordered = sortPlaces(list.map(x => x.o)).map(o => proj(...coordsOf(o)));
+    if(ordered.length > 1) routes += `<polyline class="route" stroke="${dayColor(Number(d))}" points="${ordered.map(p => p.join(",")).join(" ")}"/>`;
+  });
+  // positions: nudge markers that sit on the same spot so each stays tappable
+  const pos = pts.map(p => proj(...p.c));
+  const anchors = [];
+  for(let i = 0; i < pos.length; i++){
+    const a = anchors.find(a => Math.hypot(a.x - pos[i][0], a.y - pos[i][1]) < R * 2);
+    if(!a){ anchors.push({x:pos[i][0], y:pos[i][1], n:0}); continue; }
+    a.n++; const ring = a.n <= 6 ? 1 : 2, ang = (a.n - 1) * Math.PI / 3 * (ring === 1 ? 1 : 0.5) - Math.PI / 2;
+    pos[i] = [a.x + Math.cos(ang) * R * 2.1 * ring, a.y + Math.sin(ang) * R * 2.1 * ring];
+  }
+  // labels: greedy placement in priority order, skipped where they would collide
+  const boxes = pos.map(([x,y]) => [x-R*1.25, y-R*1.25, x+R*1.25, y+R*1.25]);
+  const hit = (b) => boxes.some(o => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
+  const inView = b => b[0] >= vb[0] && b[2] <= vb[0] + vb[2] && b[1] >= vb[1] && b[3] <= vb[1] + vb[3];
+  const order = pts.map((p,i) => i).sort((a,b) => {
+    const pa = mapSel && mapSel.id === pts[a].o.id ? 0 : pts[a].kind === "place" ? 1 : 2;
+    const pb = mapSel && mapSel.id === pts[b].o.id ? 0 : pts[b].kind === "place" ? 1 : 2;
+    return pa - pb;
+  });
+  const labels = {};
+  order.forEach(i => {
+    const p = pts[i], [x, y] = pos[i];
+    const txt = shortName(p.o.name || p.o.title || p.o.location);
+    const w = [...txt].reduce((t,ch) => t + (ch.charCodeAt(0) > 255 ? 1.02 : 0.6), 0) * FS + 4*scale, h = FS * 1.3;
+    const cands = [[x + R + 3*scale, y - h/2, "start"], [x - R - 3*scale - w, y - h/2, "end"], [x - w/2, y - R - 2*scale - h, "mid"], [x - w/2, y + R + 2*scale, "mid"]];
+    for(const [bx, by, a] of cands){
+      const b = [bx, by, bx + w, by + h];
+      if(!hit(b) && inView(b)){ boxes.push(b); labels[i] = {x: a === "start" ? bx : a === "end" ? bx + w : bx + w/2, y: by + h*0.78, a: a === "mid" ? "middle" : a, txt}; break; }
+    }
+  });
+  const marks = pts.map((p, i) => {
+    const [x, y] = pos[i]; const sel = mapSel && mapSel.id === p.o.id;
+    const col = p.kind === "booking" ? "var(--mkb)" : dayColor(p.day);
+    const r = sel ? R * 1.35 : R;
+    const shape = p.kind === "booking" ? `<rect x="${x-r}" y="${y-r}" width="${2*r}" height="${2*r}" rx="${r*0.3}" fill="${col}"/><text class="n b" x="${x}" y="${y}" font-size="${FS*0.78}">${bookingGlyph(p.o)}</text>` : `<circle cx="${x}" cy="${y}" r="${r}" fill="${col}"/><text class="n" x="${x}" y="${y}" font-size="${FS*0.85}">${p.day > 0 ? p.day : "?"}</text>`;
+    const L = labels[i];
+    const label = L ? `<text class="mklabel" x="${L.x}" y="${L.y}" font-size="${FS}" text-anchor="${L.a}">${esc(L.txt)}</text>` : "";
+    return `<g class="mk" data-mk="${i}">${sel ? `<circle cx="${x}" cy="${y}" r="${r*1.7}" fill="${col}" opacity=".22"/>` : ""}${shape}${label}</g>`;
+  }).join("");
+  svg.setAttribute("viewBox", vb.map(v => v.toFixed(2)).join(" "));
+  let grat = ""; for(let la = -34; la >= -48; la--){ const [x0,y0] = proj(la,160), [x1] = proj(la,185); grat += `M${x0} ${y0}H${x1}`; } for(let lo = 160; lo <= 185; lo++){ const [x0,y0] = proj(-30,lo), [,y1] = proj(-50,lo); grat += `M${x0} ${y0}V${y1}`; }
+  svg.innerHTML = `<rect x="-2000" y="-2000" width="6000" height="6000" fill="var(--sea)"/><path class="grat" d="${grat}"/><path class="land glow" d="${land}"/><path class="land" d="${land}"/>${routes.replace(/class="route"/g, 'class="route glowline"')}${routes}${marks}`;
+  svg._pts = pts;
+  // list
+  const pl = $("#plist");
+  if(pl){
+    const sorted = pts.slice().sort((a,b) => ptKey(a).localeCompare(ptKey(b)));
+    pl.innerHTML = sorted.length ? sorted.map(p => `<button class="p" data-pick="${pts.indexOf(p)}"><span class="bub" style="${p.kind==="booking"?"background:var(--mkb);color:var(--mkb-ink)":"background:"+dayColor(p.day)}">${p.kind==="booking"?bookingGlyph(p.o):(p.day||"?")}</span><span style="min-width:0;overflow-wrap:anywhere">${esc(p.o.name || p.o.title)}</span><span class="sub" style="white-space:nowrap">${p.kind==="booking" ? (p.o.start ? fmtDate(parseDate(p.o.start)) : (BK_TYPES[p.o.type]||BK_TYPES.other)[0]) : (p.day ? "第"+p.day+"天" : "未安排")}</span></button>`).join("") : `<div class="empty">这一天还没有带坐标的地点。</div>`;
+  }
+  renderMapInfo();
+}
+function haversine(a, b){ const R = 6371, t = Math.PI / 180; const dLa = (b[0]-a[0])*t, dLo = (b[1]-a[1])*t; const h = Math.sin(dLa/2)**2 + Math.cos(a[0]*t)*Math.cos(b[0]*t)*Math.sin(dLo/2)**2; return 2 * R * Math.asin(Math.sqrt(h)); }
+function bookingGlyph(b){ return {hotel:"住",car:"车",flight:"机",ferry:"船",activity:"票"}[b.type] || "订"; }
+function ptKey(p){ if(p.kind === "booking") return (p.o.start || "9999") ; const d = Number(p.o.day) || 0; if(!d) return "9999-z"; const s = parseDate(S.meta.start); const date = s ? isoDate(new Date(s.getFullYear(), s.getMonth(), s.getDate() + d - 1)) : "0000-" + String(d).padStart(3,"0"); return date + "T" + (p.o.time || "23:59"); }
+function shortName(n){ n = String(n || ""); const m = n.match(/^[^A-Za-z(（]+/); return (m && m[0].trim().length >= 2 ? m[0].trim() : n).slice(0, 14); }
+function renderMapInfo(){
+  const box = $("#mapinfo"); if(!box) return;
+  if(!mapSel){ box.innerHTML = ""; return; }
+  const o = mapSel.kind === "booking" ? S.bookings.find(b => b.id === mapSel.id) : S.places.find(p => p.id === mapSel.id);
+  if(!o){ box.innerHTML = ""; return; }
+  const isB = mapSel.kind === "booking";
+  const c = coordsOf(o);
+  box.innerHTML = `<div class="card pinfo"><div style="min-width:0"><div class="eyebrow">${isB ? (BK_TYPES[o.type]||BK_TYPES.other)[0] : (Number(o.day) ? "第" + o.day + " 天" : "未安排")}</div><h3 style="overflow-wrap:anywhere">${esc(o.name || o.title)}</h3><div class="sub">${isB ? fmtRange(o.start, o.end) : esc([o.time, o.notes].filter(Boolean).join(" · "))}</div>${c ? `<div class="sub num">${c[0].toFixed(4)}, ${c[1].toFixed(4)}</div>` : ""}</div>
+    <div class="row" style="justify-content:flex-end"><a class="btn primary sm" href="${navUrl(o)}" target="_blank" rel="noopener">${I.nav}Google 导航</a><a class="btn sm" href="${appleUrl(o)}" target="_blank" rel="noopener">Apple 地图</a><button class="btn sm" data-act="${isB ? "edit-booking" : "edit-place"}" data-id="${o.id}">${I.edit}编辑</button></div></div>`;
+}
+function bindMap(){
+  const svg = $("#mapsvg"); if(!svg) return;
+  const ptrs = new Map(); let start = null, moved = false;
+  const toSvg = (cx, cy) => { const r = svg.getBoundingClientRect(); const s = Math.max(vb[2] / r.width, vb[3] / r.height); const ox = (r.width - vb[2]/s)/2, oy = (r.height - vb[3]/s)/2; return [vb[0] + (cx - r.left - ox) * s, vb[1] + (cy - r.top - oy) * s, s]; };
+  const zoomAt = (cx, cy, f) => { const [x, y] = toSvg(cx, cy); const nw = Math.min(Math.max(vb[2] * f, 15), 2500); const k = nw / vb[2]; vb = [x - (x - vb[0]) * k, y - (y - vb[1]) * k, vb[2] * k, vb[3] * k]; drawMap(false); };
+  svg.addEventListener("pointerdown", e => { svg.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]); moved = false; start = {vb: vb.slice(), pts: new Map(ptrs)}; svg.classList.add("drag"); });
+  svg.addEventListener("pointermove", e => {
+    if(!ptrs.has(e.pointerId)) return; ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+    const r = svg.getBoundingClientRect(); const s = Math.max(start.vb[2] / r.width, start.vb[3] / r.height);
+    if(ptrs.size === 1 && start.pts.size === 1){
+      const [sx, sy] = [...start.pts.values()][0]; const dx = e.clientX - sx, dy = e.clientY - sy;
+      if(Math.abs(dx) + Math.abs(dy) > 4) moved = true;
+      vb = [start.vb[0] - dx * s, start.vb[1] - dy * s, start.vb[2], start.vb[3]]; svg.setAttribute("viewBox", vb.join(" "));
+    } else if(ptrs.size === 2){
+      moved = true;
+      const [a, b] = [...ptrs.values()]; const d1 = Math.hypot(a[0]-b[0], a[1]-b[1]);
+      if(!start.d){ start.d = d1; start.vb = vb.slice(); start.c = [(a[0]+b[0])/2, (a[1]+b[1])/2]; return; }
+      const f = start.d / d1; vb = start.vb.slice(); zoomAt(start.c[0], start.c[1], f);
+    }
+  });
+  const end = e => { if(!ptrs.has(e.pointerId)) return; ptrs.delete(e.pointerId); svg.classList.remove("drag");
+    if(!moved && e.type === "pointerup"){ const g = e.target.closest && e.target.closest("[data-mk]"); if(g){ const p = svg._pts[Number(g.dataset.mk)]; mapSel = {kind:p.kind, id:p.o.id}; drawMap(false); $("#mapinfo")?.scrollIntoView({block:"nearest", behavior:"smooth"}); } }
+    else if(moved) drawMap(false);
+    start = {vb: vb.slice(), pts: new Map(ptrs)}; };
+  svg.addEventListener("pointerup", end); svg.addEventListener("pointercancel", end);
+  svg.addEventListener("wheel", e => { e.preventDefault(); zoomAt(e.clientX, e.clientY, e.deltaY > 0 ? 1.2 : 1/1.2); }, {passive:false});
+}
+
+/* ---------- budget ---------- */
+function viewBudget(){
+  const r = Number(S.meta.rate) || 0.77;
+  let html = "";
+  const rows = [
+    ...S.bookings.filter(b => Number(b.cost)).map(b => ({id:b.id, src:"booking", date:(b.start||"").slice(0,10), title:b.title, category: b.type === "hotel" ? "stay" : b.type === "activity" ? "activity" : "transport", amount:Number(b.cost), currency:b.currency||"NZD", example:b.example})),
+    ...S.expenses.map(x => ({...x, src:"expense", amount:Number(x.amount)}))
+  ].sort((a,b) => (b.date||"").localeCompare(a.date||""));
+  const totalSGD = rows.reduce((t,x) => t + toSGD(x.amount, x.currency), 0);
+  const totalNZD = rows.reduce((t,x) => t + toNZD(x.amount, x.currency), 0);
+  const budgetSGD = toSGD(S.meta.budget, S.meta.budgetCur || "SGD");
+  const pct = budgetSGD ? totalSGD / budgetSGD * 100 : 0;
+  const byCat = {}; rows.forEach(x => byCat[x.category||"other"] = (byCat[x.category||"other"]||0) + toSGD(x.amount, x.currency));
+  const maxC = Math.max(1, ...Object.values(byCat));
+  const CAT_COL = {transport:"#5ac8fa", stay:"#a78bfa", fuel:"#ffd60a", food:"#ff9f0a", activity:"#30d158", shop:"#ff375f", other:"#98989d"};
+  const cats = Object.entries(byCat).sort((a,b) => b[1]-a[1]);
+  const C = 2 * Math.PI * 52; let off = 0;
+  const denom = Math.max(totalSGD, budgetSGD || 0) || 1;
+  const segs = cats.map(([k,v]) => { const len = v / denom * C; const seg = `<circle cx="70" cy="70" r="52" class="donut-seg" stroke="${CAT_COL[k]||"#98989d"}" stroke-dasharray="${Math.max(len-1.5,0.1).toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 70 70)"/>`; off += len; return seg; }).join("");
+  const donut = `<div class="donutwrap"><svg class="donut" viewBox="0 0 140 140" aria-hidden="true"><circle cx="70" cy="70" r="52" class="donut-bg"/>${segs}</svg><div class="donut-c"><div class="gl-k">已用</div><div class="donut-n num">${budgetSGD ? Math.round(pct) + "%" : "—"}</div><div class="gl-s">${budgetSGD ? "预算 " + money(budgetSGD,"SGD").replace(/\.\d+$/,"") : "未设预算"}</div></div></div>`;
+  html = stageHTML({kicker:"BUDGET · 新加坡元", title:"预算记账", lede:`汇率 1 NZD ≈ ${r} SGD · <a href="#" data-act="settings">修改</a>`,
+    actions:`<button class="btn glassbtn sm" data-act="add-expense">${I.plus}记一笔</button>`,
+    big: `<div class="gl-k" style="margin-top:34px">总花费</div>` + bigNum(money(totalSGD,"SGD").replace(/\.\d+$/,""), "", Math.round(totalSGD), "sgd") + `<div class="lede" style="margin-top:8px">≈ ${money(totalNZD,"NZD").replace(/\.\d+$/,"")} · ${budgetSGD ? (pct>100 ? "超出 " + money(totalSGD-budgetSGD,"SGD") : "还剩 " + money(budgetSGD-totalSGD,"SGD")) : `<a href="#" data-act="settings">设置总预算</a>`}</div>`,
+    side: donut,
+    tiles: cats.map(([k,v]) => `<div class="glass leg"><div class="gl-k"><i style="background:${CAT_COL[k]||"#98989d"}"></i>${EX_CATS[k]||k}</div><div class="gl-n num sm">${money(v,"SGD").replace(/\.\d+$/,"")}</div><div class="gl-s">${totalSGD ? Math.round(v/totalSGD*100) : 0}%</div></div>`).join(""), tilesN: cats.length <= 4 ? Math.max(cats.length,1) : 3});
+  html += exampleBanner();
+  let lastD = null;
+  const lis = rows.map(x => {
+    const d = x.date || ""; let head = "";
+    if(d !== lastD){ lastD = d; head = `<li class="xday">${d ? fmtDate(parseDate(d)) + " " + WD[parseDate(d).getDay()] : "未填日期"}</li>`; }
+    const conv = x.currency === "SGD" ? "" : `<small>${money(x.amount, x.currency)}</small>`;
+    return head + `<li class="xrow" data-act="${x.src==="booking"?"edit-booking":"edit-expense"}" data-id="${x.id}"><div style="min-width:0"><div class="tt">${esc(x.title)}</div><div class="mm"><span>${EX_CATS[x.category]||"其他"}</span>${x.src==="booking"?'<span class="pill">来自预订</span>':""}</div></div><div class="amt">${money(toSGD(x.amount,x.currency),"SGD")}${conv}</div></li>`;
+  }).join("");
+  html += `<div class="card"><div class="row" style="justify-content:space-between"><h2>明细</h2><span class="sub">金额统一换算成 SGD</span></div><div class="sub" style="margin:4px 0 4px">填了金额的预订会自动算进来；在当地的花费点“记一笔”。</div>${rows.length ? `<ul class="xlist">${lis}</ul>` : `<div class="empty">还没有记录。</div>`}</div>`;
+  return html;
+}
+
+/* ---------- packing ---------- */
+function viewPacking(){
+  const groups = {}; S.packing.forEach(p => (groups[p.group || "其他"] = groups[p.group || "其他"] || []).push(p));
+  const done = S.packing.filter(p => p.checked).length;
+  const frac = S.packing.length ? done / S.packing.length : 0;
+  let html = stageHTML({kicker:"PACKING · 出发前清单", title:"打包清单", lede:"勾一件少一件，出发前全部变蓝就齐了。",
+    actions: done ? `<button class="btn glassbtn sm" data-act="reset-pack">全部取消勾选</button>` : "",
+    big: bigNum(Math.round(frac*100) + "%", `已打包 ${done} / ${S.packing.length}`, Math.round(frac*100), "pct"),
+    side: `<div class="donutwrap">${ringSVG(frac, 0).replace('class="ring"', 'class="ring big"')}<div class="donut-c"><div class="gl-k">还差</div><div class="donut-n num">${S.packing.length - done}</div><div class="gl-s">件</div></div></div>`,
+    tiles: Object.entries(groups).map(([g, list]) => { const d = list.filter(x => x.checked).length; return `<div class="glass leg"><div class="gl-k">${esc(g)}</div><div class="gl-n num sm">${d}<small>/ ${list.length}</small></div><div class="gbar"><i style="width:${(d/list.length*100).toFixed(0)}%"></i></div></div>`; }).join(""), tilesN:Math.min(5, Object.keys(groups).length || 1)});
+  html += `<form class="card pkadd" id="pkform"><input id="pk-text" placeholder="加一件东西" aria-label="物品"><select id="pk-group" aria-label="分类">${[...new Set(["证件","衣物","电子","洗漱药品","自驾","其他", ...Object.keys(groups)])].map(g => `<option>${esc(g)}</option>`).join("")}</select><button class="btn primary" type="submit">${I.plus}添加</button></form>`;
+  if(!S.packing.length) return html + `<div class="card empty">清单是空的。在上面添加第一件东西。</div>`;
+  html += `<div class="pk-groups">${Object.entries(groups).map(([g, list]) => `<div class="card pk"><div class="row" style="justify-content:space-between"><h3>${esc(g)}</h3><span class="sub num">${list.filter(x=>x.checked).length}/${list.length}</span></div>${list.sort((a,b) => (a.order||0)-(b.order||0)).map(p => `<label class="${p.checked?"on":""}"><input type="checkbox" data-pk="${p.id}" ${p.checked?"checked":""}><span>${esc(p.text)}</span><button class="iconbtn x" type="button" title="删除" aria-label="删除 ${esc(p.text)}" data-act="del-pack" data-id="${p.id}" style="width:28px;height:28px">×</button></label>`).join("")}</div>`).join("")}</div>`;
+  return html;
+}
+
+/* ---------- info ---------- */
+function viewInfo(){
+  const nzNow = (() => { try { return new Intl.DateTimeFormat("zh-CN", {timeZone:"Pacific/Auckland", hour:"2-digit", minute:"2-digit", hour12:false}).format(new Date()); } catch(e){ return ""; } })();
+  const sgNow = (() => { try { return new Intl.DateTimeFormat("zh-CN", {timeZone:"Asia/Singapore", hour:"2-digit", minute:"2-digit", hour12:false}).format(new Date()); } catch(e){ return ""; } })();
+  const dayIn = tz => { try { return new Intl.DateTimeFormat("zh-CN", {timeZone:tz, month:"long", day:"numeric", weekday:"short"}).format(new Date()); } catch(e){ return ""; } };
+  const nzDay = dayIn("Pacific/Auckland"), sgDay = dayIn("Asia/Singapore");
+  const r = Number(S.meta.rate) || 0.77;
+  let html = stageHTML({kicker:"KIA ORA · 新西兰实用信息", title:"出发前看一遍", lede:"时差、换算、自驾规则和入境须知，到了当地也能随时查。",
+    big: `<div class="gl-k" style="margin-top:34px">新西兰现在</div>` + bigNum(`<span id="nzclock">${esc(nzNow)}</span>`, esc(nzDay)),
+    tiles: tile("新加坡现在", `<span id="sgclock">${esc(sgNow)}</span>`, esc(sgDay)) + tile("时差", `+5<small>小时</small>`, "新西兰夏令时期间；其余时间 +4") + `<div class="glass"><div class="gl-k">快速换算</div><div class="cv"><input id="cv-nzd" type="number" inputmode="decimal" value="100" aria-label="纽币金额"><span>NZD =</span></div><div class="gl-n num" id="cv-out">${money(100*r,"SGD")}</div></div>` + tile("紧急电话", "111", "警察 / 消防 / 救护"), tilesN:4});
+  html += `<div class="info-grid">
+  <div class="card"><h3>路况与信号</h3><p>路况和封路看 NZTA 交通信息网站或 App。山区和峡湾常常没有手机信号，出发前下载离线地图。</p></div>
+  <div class="card"><h3>入境</h3><ul><li>新加坡护照免签，但需提前申请 NZeTA（电子旅行授权），同时缴纳国际游客保育旅游税 IVL。</li><li>入境卡如实申报所有食物、户外装备和鞋上的泥土，生物安全检查很严，没申报会被罚款。</li></ul></div>
+  <div class="card"><h3>自驾要点</h3><ul><li>靠左行驶，右舵车。</li><li>限速：开阔道路一般 100 km/h，市区 50 km/h，留意路牌。</li><li>单车道桥很多，看清让行标志：红色小箭头一方让行。</li><li>英文驾照可以直接开，最长 12 个月；非英文需要翻译件或国际驾照。</li><li>南岛偏远路段加油站少，油表过半就加。</li><li>累了就停，景色好的路段不要边开边拍。</li></ul></div>
+  <div class="card"><h3>电和网络</h3><ul><li>电压 230V，I 型插头（八字斜扁脚），新加坡的英标插头需要转换器。</li><li>手机卡：One NZ、Spark、2degrees，机场可买。</li></ul></div>
+  <div class="card"><h3>天气与装备</h3><ul><li>一天四季，防风防水外套必带，夏天也要带保暖层。</li><li>紫外线很强，防晒霜和墨镜不能少。</li><li>西海岸和峡湾有沙蝇（sandflies），带驱虫剂。</li></ul></div>
+  <div class="card"><h3>小习惯</h3><ul><li>不强制小费。</li><li>大部分地方可刷卡，部分刷卡有手续费。</li><li>徒步出发前查 DOC（保育部）网站的步道状态。</li></ul></div>
+  </div><div class="sub">以上为一般性信息，出行前请以官方网站为准。</div>`;
+  return html;
+}
+
+/* ---------- render ---------- */
+let lastView = null;
+function render(){
+  const el = $("#view"); if(!el) return;
+  if(document.querySelector(".scrim")) { pendingRender = true; return; }
+  const y = window.scrollY;
+  const fn = {trip:viewTrip, bookings:viewBookings, map:viewMap, budget:viewBudget, packing:viewPacking, info:viewInfo}[view];
+  // keep packing input text across re-render
+  const pkText = $("#pk-text")?.value;
+  el.innerHTML = fn();
+  if(pkText && $("#pk-text")) $("#pk-text").value = pkText;
+  if(view === "map"){ drawMap(lastView !== "map"); bindMap(); }
+  const fresh = lastView !== view;
+  const st = $("#stage .stars"); if(st) st.style.backgroundImage = STARS;
+  if(!fresh){ $("#stage")?.classList.add("still"); window.scrollTo(0, y); }
+  else { setupReveal(); countUp(); }
+  lastView = view;
+  parallax();
+}
+const REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+const STARS = (() => { let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647; let c = ""; for(let i = 0; i < 70; i++){ const r = rnd() < .15 ? .9 : .55; c += `<circle cx='${(rnd()*800).toFixed(0)}' cy='${(rnd()*420).toFixed(0)}' r='${r}' fill-opacity='${(.35 + rnd()*.6).toFixed(2)}'/>`; } return `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='800' height='420' fill='white'>${c}</svg>`)}")`; })();
+let io = null;
+function setupReveal(){
+  if(REDUCED || !("IntersectionObserver" in window)) return;
+  io?.disconnect();
+  io = new IntersectionObserver(es => es.forEach(en => { if(en.isIntersecting){ en.target.classList.remove("pre"); io.unobserve(en.target); } }), {rootMargin:"0px 0px -8% 0px"});
+  const vh = window.innerHeight;
+  document.querySelectorAll("#view .day, #view .card, #view .stat, #view .bk, #view .darkcard, #view .sec-head, #view .banner").forEach(el => {
+    if(el.getBoundingClientRect().top > vh * 0.92){ el.classList.add("reveal", "pre"); io.observe(el); }
+  });
+}
+function countUp(){
+  if(REDUCED) return;
+  document.querySelectorAll("#stage [data-count]").forEach(el => {
+    const to = Number(el.dataset.count); if(!(to > 0)) return;
+    const t0 = performance.now(), dur = 1100;
+    const fmt = el.dataset.fmt, show = v => fmt === "sgd" ? "S$" + v.toLocaleString("en-US") : fmt === "pct" ? v + "%" : String(v);
+    const final = el.innerHTML;
+    const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); if(k < 1){ el.textContent = show(Math.round(to * e)); requestAnimationFrame(step); } else el.innerHTML = final; };
+    el.textContent = show(0); requestAnimationFrame(step);
+  });
+}
+let pTick = false;
+function parallax(){
+  if(REDUCED) return;
+  const stage = $("#stage"); if(!stage) return;
+  const y = Math.max(0, window.scrollY), h = stage.offsetHeight || 1;
+  if(y > h) return;
+  const r1 = stage.querySelector(".r1"), r2 = stage.querySelector(".r2"), inn = $("#stage-in"), sky = stage.querySelector(".sky");
+  if(r1) r1.style.transform = `translate3d(0,${(y * 0.18).toFixed(1)}px,0)`;
+  if(r2) r2.style.transform = `translate3d(0,${(y * 0.06).toFixed(1)}px,0)`;
+  if(sky) sky.style.transform = `translate3d(0,${(y * 0.35).toFixed(1)}px,0)`;
+  if(inn){ inn.style.transform = `translate3d(0,${(y * 0.22).toFixed(1)}px,0)`; inn.style.opacity = String(Math.max(0.15, 1 - y / (h * 0.85))); }
+}
+window.addEventListener("scroll", () => { if(pTick) return; pTick = true; requestAnimationFrame(() => { pTick = false; parallax(); }); }, {passive:true});
+let pendingRender = false;
+
+/* ---------- forms ---------- */
+function openSheet(title, fieldsHTML, onSubmit, extraBtns){
+  const layer = $("#layer");
+  layer.innerHTML = `<div class="scrim"><form class="sheet" id="sheet"><div class="row" style="justify-content:space-between"><h2>${title}</h2><button type="button" class="iconbtn" data-close aria-label="关闭">×</button></div><div class="form">${fieldsHTML}</div><div class="row" style="justify-content:space-between"><div class="row">${extraBtns || ""}</div><div class="row"><button type="button" class="btn" data-close>取消</button><button type="submit" class="btn primary">保存</button></div></div></form></div>`;
+  const close = () => { layer.innerHTML = ""; if(pendingRender){ pendingRender = false; render(); } };
+  layer.querySelectorAll("[data-close]").forEach(b => b.onclick = close);
+  layer.querySelector(".scrim").addEventListener("click", e => { if(e.target.classList.contains("scrim")) close(); });
+  $("#sheet").addEventListener("submit", e => { e.preventDefault(); const fd = {}; layer.querySelectorAll("[name]").forEach(i => fd[i.name] = i.type === "checkbox" ? i.checked : i.value.trim()); if(onSubmit(fd, close) !== false) close(); });
+  if(window.matchMedia && matchMedia("(hover: hover) and (pointer: fine)").matches) setTimeout(() => layer.querySelector("input,textarea")?.focus(), 30);
+  return layer;
+}
+const fld = (name, label, val, opts = {}) => {
+  const full = opts.full ? " full" : ""; const id = "f-" + name;
+  if(opts.options) return `<div class="f${full}"><label for="${id}">${label}</label><select id="${id}" name="${name}">${opts.options.map(([v,l]) => `<option value="${esc(v)}" ${String(v)===String(val??"")?"selected":""}>${esc(l)}</option>`).join("")}</select></div>`;
+  if(opts.textarea) return `<div class="f${full}"><label for="${id}">${label}</label><textarea id="${id}" name="${name}" placeholder="${esc(opts.ph||"")}">${esc(val)}</textarea></div>`;
+  return `<div class="f${full}"><label for="${id}">${label}</label><input id="${id}" name="${name}" type="${opts.type||"text"}" value="${esc(val)}" placeholder="${esc(opts.ph||"")}" ${opts.list?`list="${opts.list}"`:""} ${opts.step?`step="${opts.step}"`:""} ${opts.mode?`inputmode="${opts.mode}"`:""}></div>`;
+};
+const placeDatalist = () => `<datalist id="nzplaces">${PLACES_REF.map(p => `<option value="${esc(p[0])}">`).join("")}</datalist>`;
+function locFields(o, nameField){
+  const c = coordsOf(o);
+  return `<div class="f full"><label for="f-coords">坐标（纬度, 经度）</label><div class="row" style="flex-wrap:nowrap"><input id="f-coords" name="coords" value="${c ? c.join(", ") : ""}" placeholder="例如 -45.0312, 168.6626，或粘贴 Google 地图链接" style="flex:1"><button type="button" class="btn sm" id="geo-btn">${I.pin}查找坐标</button></div><div class="hint" id="geo-hint">从下拉建议里选常见地点会自动填坐标。其他地方可以点“查找坐标”，或者从 Google 地图复制坐标粘贴进来。</div></div>`;
+}
+function bindGeo(layer, nameSel){
+  const nameI = layer.querySelector(nameSel), coordI = layer.querySelector("#f-coords"), hint = layer.querySelector("#geo-hint");
+  const fromRef = v => { const s = String(v||"").toLowerCase().trim(); if(!s) return null; return PLACES_REF.find(p => p[0].toLowerCase() === s) || PLACES_REF.find(p => p[0].toLowerCase().includes(s) || s.includes(p[0].split(" ")[0].toLowerCase())); };
+  nameI?.addEventListener("change", () => { const m = fromRef(nameI.value); if(m && !coordI.value){ coordI.value = `${m[1]}, ${m[2]}`; hint.textContent = "已从常见地点填入大致坐标。"; hint.className = "hint"; } });
+  layer.querySelector("#geo-btn").onclick = async () => {
+    const v = nameI.value.trim(); if(!v){ hint.textContent = "先填地点名称。"; hint.className = "hint err"; return; }
+    const m = fromRef(v); if(m){ coordI.value = `${m[1]}, ${m[2]}`; hint.textContent = "已从常见地点填入大致坐标。"; hint.className = "hint"; return; }
+    hint.textContent = "正在查找…"; hint.className = "hint";
+    try { const r = await fetch("https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=nz&accept-language=zh,en&q=" + encodeURIComponent(v)).then(r => r.json());
+      if(r && r[0]){ coordI.value = `${Number(r[0].lat).toFixed(4)}, ${Number(r[0].lon).toFixed(4)}`; hint.textContent = `找到：${String(r[0].display_name || "").split(",").slice(0,2).join(",")}（大致位置，可在地图上核对）`; return; }
+    } catch(e){}
+    const sample = null;
+    if(!sample){ hint.textContent = "这里没法自动查找。请在 Google 地图长按该地点，复制坐标粘贴进来。"; hint.className = "hint err"; return; }
+    hint.textContent = "正在请 Claude 查找…"; hint.className = "hint";
+    try {
+      const res = await sample.json(`Return ONLY a JSON object {"lat": number, "lng": number, "name": string} with the approximate coordinates of this place in New Zealand (name = its English name). If you are not confident it is a real place in New Zealand, return {"lat": null, "lng": null, "name": ""}.\nPlace: ${v}`, {modelTier:"quick"});
+      if(res && typeof res.lat === "number" && typeof res.lng === "number" && res.lat < -33 && res.lat > -48 && res.lng > 165 && res.lng < 179.5){ coordI.value = `${res.lat.toFixed(4)}, ${res.lng.toFixed(4)}`; hint.textContent = `找到：${String(res.name||"").slice(0,60)}（大致位置，可在地图上核对）`; }
+      else { hint.textContent = "没找到这个地点。换个写法，或从 Google 地图复制坐标。"; hint.className = "hint err"; }
+    } catch(e){ hint.textContent = e && e.code === "not_granted" ? "没有授权 Claude 查找。可以从 Google 地图复制坐标粘贴进来。" : "查找失败，请稍后再试或手动粘贴坐标。"; hint.className = "hint err"; }
+  };
+}
+function parseCoords(s){
+  s = String(s || ""); if(!s.trim()) return {lat:"", lng:""};
+  let m = s.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) || s.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || s.match(/(-?\d{1,2}\.\d+)\s*[,，\s]\s*(-?\d{2,3}\.\d+)/);
+  if(!m) return null; const lat = Number(m[1]), lng = Number(m[2]);
+  if(!(lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180)) return null;
+  return {lat, lng};
+}
+function dayOptions(){ return [[0,"未安排"], ...tripDays().map(d => [d.n, `第${d.n}天${d.date ? " · " + fmtDate(d.date) : ""}`])]; }
+
+function editPlace(p){
+  const isNew = !p; p = p || {name:"", day:0, time:"", duration:"", category:"sight", notes:"", lat:"", lng:""};
+  const layer = openSheet(isNew ? "添加景点" : "编辑景点",
+    fld("name","名称",p.name,{full:true, list:"nzplaces", ph:"例如 胡克谷步道"}) + placeDatalist() +
+    fld("day","哪一天",p.day||0,{options:dayOptions()}) + fld("time","时间（可选）",p.time,{type:"time"}) +
+    fld("category","类型",p.category,{options:Object.entries(PL_CATS).map(([k,v]) => [k,v[0]])}) + fld("duration","大约时长",p.duration,{ph:"例如 3 小时"}) +
+    locFields(p) + fld("notes","备注",p.notes,{textarea:true, full:true, ph:"门票、停车、注意事项…"}) +
+    (isNew ? "" : `<div class="f full"><label class="check"><input type="checkbox" name="done" id="f-done" ${p.done ? "checked" : ""}>已经去过了</label></div>`),
+    fd => {
+      const c = parseCoords(fd.coords); if(c === null){ const h = $("#geo-hint"); h.textContent = "坐标格式看不懂，请写成：-45.03, 168.66"; h.className = "hint err"; return false; }
+      if(!fd.name){ toast("请填写名称"); return false; }
+      const sameDay = S.places.filter(x => Number(x.day) === Number(fd.day));
+      put("places", {...p, name:fd.name, day:Number(fd.day)||0, time:fd.time, category:fd.category, duration:fd.duration, notes:fd.notes, lat:c.lat, lng:c.lng, order: isNew || Number(p.day) !== Number(fd.day) ? sameDay.length : (p.order||0), done: isNew ? false : !!fd.done});
+      toast(isNew ? "已添加" : "已保存");
+    }, isNew ? "" : `<button type="button" class="btn danger" id="del-btn">删除</button>`);
+  bindGeo(layer, "#f-name");
+  bindDelete(layer, () => { del("places", p.id); toast("已删除"); });
+}
+function editBooking(b){
+  const isNew = !b; b = b || {type:"flight", title:"", start:"", end:"", location:"", confirm:"", cost:"", currency:"NZD", notes:"", lat:"", lng:""};
+  const layer = openSheet(isNew ? "添加预订" : "编辑预订",
+    fld("type","类型",b.type,{options:Object.entries(BK_TYPES).map(([k,v]) => [k,v[0]])}) + fld("title","名称",b.title,{ph:"例如 新航 SQ285 新加坡→奥克兰"}) +
+    fld("start","开始 / 入住 / 起飞",(b.start||"").replace(" ","T"),{type:"datetime-local"}) + fld("end","结束 / 退房 / 到达",(b.end||"").replace(" ","T"),{type:"datetime-local"}) +
+    fld("location","地点 / 地址（取车点、出发机场、酒店）",b.location,{full:true, list:"nzplaces", ph:"例如 基督城机场 CHC"}) + placeDatalist() + locFields(b) +
+    fld("location2","到达 / 还车地点（不同时才填）",b.location2,{full:true, list:"nzplaces", ph:"例如 皇后镇机场 ZQN"}) +
+    fld("confirm","确认号 / 订单号",b.confirm) + `<div class="f"><label for="f-cost">金额</label><div class="money"><input id="f-cost" name="cost" type="number" step="0.01" inputmode="decimal" value="${esc(b.cost)}"><select name="currency" id="f-currency" aria-label="币种"><option ${b.currency!=="SGD"?"selected":""}>NZD</option><option ${b.currency==="SGD"?"selected":""}>SGD</option></select></div></div>` +
+    fld("notes","备注",b.notes,{textarea:true, full:true, ph:"行李额度、取车要求、早餐…"}),
+    fd => {
+      const c = parseCoords(fd.coords); if(c === null){ const h = $("#geo-hint"); h.textContent = "坐标格式看不懂，请写成：-45.03, 168.66"; h.className = "hint err"; return false; }
+      if(!fd.title){ toast("请填写名称"); return false; }
+      put("bookings", {...b, type:fd.type, title:fd.title, start:fd.start, end:fd.end, location:fd.location, location2:fd.location2, confirm:fd.confirm, cost:fd.cost === "" ? "" : Number(fd.cost), currency:fd.currency, notes:fd.notes, lat:c.lat, lng:c.lng});
+      toast(isNew ? "已添加" : "已保存");
+    }, isNew ? "" : `<button type="button" class="btn danger" id="del-btn">删除</button>`);
+  bindGeo(layer, "#f-location");
+  bindDelete(layer, () => { del("bookings", b.id); toast("已删除"); });
+}
+function editExpense(x){
+  const isNew = !x; x = x || {date: isoDate(new Date()), title:"", category:"food", amount:"", currency:"NZD"};
+  const layer = openSheet(isNew ? "记一笔" : "编辑花费",
+    fld("title","项目",x.title,{full:true, ph:"例如 皇后镇 Fergburger 午餐"}) + fld("date","日期",x.date,{type:"date"}) +
+    fld("category","类别",x.category,{options:Object.entries(EX_CATS)}) +
+    `<div class="f"><label for="f-amount">金额</label><div class="money"><input id="f-amount" name="amount" type="number" step="0.01" inputmode="decimal" value="${esc(x.amount)}"><select name="currency" id="f-currency2" aria-label="币种"><option ${x.currency!=="SGD"?"selected":""}>NZD</option><option ${x.currency==="SGD"?"selected":""}>SGD</option></select></div><div class="hint" id="cv-hint"></div></div>`,
+    fd => {
+      if(!fd.title || !Number(fd.amount)){ toast("请填写项目和金额"); return false; }
+      put("expenses", {...x, title:fd.title, date:fd.date, category:fd.category, amount:Number(fd.amount), currency:fd.currency}); toast(isNew ? "已记录" : "已保存");
+    }, isNew ? "" : `<button type="button" class="btn danger" id="del-btn">删除</button>`);
+  const a = layer.querySelector("#f-amount"), c = layer.querySelector("#f-currency2"), h = layer.querySelector("#cv-hint");
+  const upd = () => { const v = Number(a.value); h.textContent = v ? (c.value === "NZD" ? `≈ ${money(toSGD(v,"NZD"),"SGD")}` : `≈ ${money(toNZD(v,"SGD"),"NZD")}`) : ""; };
+  a.oninput = upd; c.onchange = upd; upd();
+  bindDelete(layer, () => { del("expenses", x.id); toast("已删除"); });
+}
+function bindDelete(layer, fn){
+  const b = layer.querySelector("#del-btn"); if(!b) return;
+  b.onclick = () => { if(b.dataset.armed){ fn(); layer.innerHTML = ""; if(pendingRender){ pendingRender = false; render(); } } else { b.dataset.armed = "1"; b.textContent = "再点一次确认删除"; } };
+}
+function openSettings(){
+  const m = S.meta;
+  const layer = openSheet("设置与备份",
+    fld("name","旅行名称",m.name,{full:true}) + fld("start","出发日期",m.start,{type:"date"}) + fld("end","返程日期",m.end,{type:"date"}) +
+    fld("rate","汇率：1 NZD = ? SGD",m.rate,{type:"number", step:"0.0001", mode:"decimal"}) +
+    `<div class="f"><label for="f-budget">总预算</label><div class="money"><input id="f-budget" name="budget" type="number" step="1" inputmode="decimal" value="${esc(m.budget||"")}"><select name="budgetCur" id="f-bcur" aria-label="币种"><option ${m.budgetCur!=="NZD"?"selected":""}>SGD</option><option ${m.budgetCur==="NZD"?"selected":""}>NZD</option></select></div></div>` +
+    `<div class="f full"><label>同步状态</label><div class="sync" id="sync2" style="padding:0"></div><div class="hint">电脑和手机用同一个邮箱和口令解锁，看到的是同一份数据。</div><div class="row" style="margin-top:8px"><button type="button" class="btn sm ghost" id="logout-btn">在这台设备上退出</button></div></div>
+     <div class="f full"><label>备份</label><div class="row"><button type="button" class="btn sm" id="exp-btn">导出备份文件</button><button type="button" class="btn sm" id="copy-btn">复制备份文本</button><label class="btn sm" for="imp-file" style="cursor:pointer">导入备份</label><input type="file" id="imp-file" accept=".json,application/json,text/plain" hidden></div><div class="hint" id="bk-hint">导入会把备份里的记录加进来，同名记录会被覆盖。</div></div>`,
+    fd => { putMeta({name:fd.name || "我的旅行", start:fd.start, end:fd.end, rate:Number(fd.rate) || 0.77, budget:Number(fd.budget) || 0, budgetCur:fd.budgetCur}); toast("已保存"); });
+  renderSync();
+  const dump = () => JSON.stringify({app:"nztrip", v:1, exported:new Date().toISOString(), meta:S.meta, bookings:S.bookings, places:S.places, expenses:S.expenses, packing:S.packing}, null, 1);
+  layer.querySelector("#exp-btn").onclick = async () => {
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([dump()], {type:"application/json"})); a.download = `旅行备份-${isoDate(new Date())}.json`; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  };
+  const lo = layer.querySelector("#logout-btn"); if(lo) lo.onclick = () => window.__logout && window.__logout();
+  layer.querySelector("#copy-btn").onclick = () => { const t = dump(); navigator.clipboard.writeText(t).then(() => toast("已复制备份文本"), () => { layer.querySelector("#bk-hint").textContent = "复制失败，浏览器不允许访问剪贴板。"; }); };
+  layer.querySelector("#imp-file").onchange = e => {
+    const f = e.target.files[0]; if(!f) return; const rd = new FileReader();
+    rd.onload = async () => {
+      try { const j = JSON.parse(rd.result); if(j.app !== "nztrip") throw 0;
+        for(const col of COLS) for(const rec of (j[col] || [])) await put(col, rec);
+        if(j.meta) await putMeta(j.meta);
+        layer.querySelector("#bk-hint").textContent = "导入完成。"; toast("导入完成");
+      } catch(err){ layer.querySelector("#bk-hint").textContent = "这个文件不是本应用导出的备份。"; }
+    }; rd.readAsText(f);
+  };
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click", async e => {
+  const link = e.target.closest("a[href]");
+  if(link && !link.dataset.act && link.getAttribute("href") !== "#") return;
+  const t = e.target.closest("[data-go],[data-act],[data-copy],[data-bkf],[data-mapday],[data-zoom],[data-pick]");
+  if(!t) return;
+  if(t.dataset.go){ go(t.dataset.go); return; }
+  if(t.dataset.copy != null){ e.preventDefault(); const v = t.dataset.copy; navigator.clipboard.writeText(v).then(() => toast("已复制 " + v), () => toast("复制失败，请长按选择")); return; }
+  if(t.dataset.bkf){ bkFilter = t.dataset.bkf; render(); return; }
+  if(t.dataset.mapday){ mapDay = t.dataset.mapday; mapSel = null; vb = null; render(); return; }
+  if(t.dataset.zoom){ const svg = $("#mapsvg"); const r = svg.getBoundingClientRect();
+    if(t.dataset.zoom === "fit"){ vb = null; drawMap(true); return; }
+    const f = t.dataset.zoom === "in" ? 1/1.6 : 1.6; const cx = vb[0] + vb[2]/2, cy = vb[1] + vb[3]/2; vb = [cx - vb[2]*f/2, cy - vb[3]*f/2, vb[2]*f, vb[3]*f]; drawMap(false); return; }
+  if(t.dataset.pick != null){ const p = $("#mapsvg")._pts[Number(t.dataset.pick)]; mapSel = {kind:p.kind, id:p.o.id}; const [x,y] = proj(...p.c); const w = Math.min(vb[2], 160), h = vb[3] * w / vb[2]; vb = [x - w/2, y - h/2, w, h]; drawMap(false); $("#mapbox").scrollIntoView({block:"nearest", behavior:"smooth"}); return; }
+  const act = t.dataset.act; if(!act) return;
+  e.preventDefault();
+  const id = t.dataset.id;
+  if(act === "settings") openSettings();
+  else if(act === "add-place"){ editPlace(null); const d = Number(t.dataset.day)||0; const sel = $("#f-day"); if(sel) sel.value = String(d); }
+  else if(act === "edit-place") editPlace(S.places.find(p => p.id === id));
+  else if(act === "toggle-done"){ const p = S.places.find(p => p.id === id); if(p) put("places", {...p, done: !p.done}); }
+  else if(act === "add-booking") editBooking(null);
+  else if(act === "edit-booking") editBooking(S.bookings.find(b => b.id === id));
+  else if(act === "add-expense") editExpense(null);
+  else if(act === "edit-expense") editExpense(S.expenses.find(x => x.id === id));
+  else if(act === "day-theme"){
+    const n = t.dataset.day; const cur = (S.meta.dayTitles || {})[n] || "";
+    openSheet(`第 ${n} 天的主题`, fld("theme","一句话说明这天做什么",cur,{full:true, ph:"例如 前往蒂卡波，看星空"}), fd => { const dt = Object.assign({}, S.meta.dayTitles || {}); if(fd.theme) dt[n] = fd.theme; else delete dt[n]; putMeta({dayTitles:dt}); });
+  }
+  else if(act === "map-day"){ mapDay = t.dataset.day; mapSel = null; vb = null; go("map"); }
+  else if(act === "del-pack") del("packing", id);
+  else if(act === "reset-pack"){ for(const p of S.packing.filter(p => p.checked)) await put("packing", {...p, checked:false}); }
+  else if(act === "clear-examples"){
+    if(!t.dataset.armed){ t.dataset.armed = "1"; t.textContent = "确定清除？再点一次"; return; }
+    for(const col of ["bookings","places","expenses"]) for(const x of S[col].filter(x => x.example)) await del(col, x.id);
+    const m = Object.assign({}, S.meta); if(m.exampleMeta){ await putMeta({name:"新西兰自驾", start:"", end:"", dayTitles:{}, exampleMeta:false}); }
+    toast("示例已清除，开始填你自己的行程吧");
+  }
+});
+document.addEventListener("change", e => {
+  const c = e.target.closest("[data-pk]"); if(c){ const p = S.packing.find(x => x.id === c.dataset.pk); if(p) put("packing", {...p, checked:c.checked}); }
+});
+document.addEventListener("input", e => {
+  if(e.target.id === "cv-nzd"){ const o = $("#cv-out"); if(o) o.textContent = money((Number(e.target.value)||0) * (Number(S.meta.rate)||0.77), "SGD"); }
+});
+document.addEventListener("submit", e => {
+  if(e.target.id === "pkform"){ e.preventDefault(); const txt = $("#pk-text").value.trim(); if(!txt) return; const g = $("#pk-group").value; $("#pk-text").value = ""; put("packing", {text:txt, group:g, checked:false, order:S.packing.length}); }
+});
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if(view === "map") drawMap(false); }, 150); });
+
+document.getElementById("defs").innerHTML = SVGDEFS;
+window.__boot = () => { renderNav(); render(); connect(); };
+setInterval(() => { if(view !== "info") return; const f = tz => { try { return new Intl.DateTimeFormat("zh-CN", {timeZone:tz, hour:"2-digit", minute:"2-digit", hour12:false}).format(new Date()); } catch(e){ return ""; } }; const a = document.getElementById("nzclock"), b = document.getElementById("sgclock"); if(a) a.textContent = f("Pacific/Auckland"); if(b) b.textContent = f("Asia/Singapore"); }, 20000);
+})();
+</script>
+</div><div id="lock" hidden><div class="lock-card"><div class="lock-ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div><h1 class="lock-t">旅行手帐</h1><p class="lock-s">这是私人页面，请输入邮箱和口令解锁。<br>每台设备只需解锁一次。</p><form id="lock-form" autocomplete="on"><input id="lock-email" type="email" autocomplete="username" placeholder="邮箱" required><input id="lock-pw" type="password" autocomplete="current-password" placeholder="口令" required><button class="btn" type="submit" id="lock-go">解锁</button><div class="lock-err" id="lock-err"></div></form></div></div>
+<style>
+#app-root[hidden]{display:none!important}
+#lock{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(180deg,#03050b 0%,#07122a 45%,#0d2a3f 80%,#12384a 100%);color:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Helvetica,Arial,sans-serif}
+#lock[hidden]{display:none}
+.lock-card{width:min(360px,100%);text-align:center}
+.lock-ic{width:56px;height:56px;border-radius:18px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.1);color:#9fd8ff}
+.lock-t{font-size:34px;letter-spacing:-.03em;margin:0;font-weight:700;background:linear-gradient(95deg,#fff 20%,#bfe9ff 60%,#c6ffe4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lock-s{color:rgba(245,245,247,.68);font-size:15px;line-height:1.6;margin:10px 0 26px}
+#lock-form{display:flex;flex-direction:column;gap:10px}
+#lock-form input{height:48px;border-radius:14px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;padding:0 16px;font-size:16px;outline:none}
+#lock-form input:focus{border-color:#5ac8fa;background:rgba(255,255,255,.12)}
+#lock-form input::placeholder{color:rgba(245,245,247,.45)}
+#lock-go{height:48px;border-radius:14px;border:0;background:#0071e3;color:#fff;font-size:16px;font-weight:600;margin-top:4px;cursor:pointer}
+#lock-go:disabled{opacity:.6}
+.lock-err{min-height:20px;color:#ff8a80;font-size:14px}
+</style>
+<script type="module">
+import {initializeApp, getAuth, onAuthStateChanged, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, signOut, initializeFirestore, persistentLocalCache, persistentMultipleTabManager, doc, collection, onSnapshot, setDoc, deleteDoc} from "./fb.js";
+const CFG = {"apiKey":"AIzaSyAd0sDGA2vZ4X45bf3Tr-j28QI9E0Fe5Os","authDomain":"nz-trip-5e9e4.firebaseapp.com","projectId":"nz-trip-5e9e4","storageBucket":"nz-trip-5e9e4.firebasestorage.app","messagingSenderId":"102602093446","appId":"1:102602093446:web:ee6e5d997b613c178fb207"};
+const app = initializeApp(CFG), auth = getAuth(app);
+let fs; try { fs = initializeFirestore(app, {localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})}); } catch(e){ fs = initializeFirestore(app, {}); }
+const wrapDoc = s => ({exists: s.exists(), data: () => s.data(), metadata: {fromCache: s.metadata.fromCache}});
+function mk(uid){
+  const base = ["users", uid];
+  return {
+    doc(path){ const r = doc(fs, ...base, ...path.split("/")); return {onSnapshot: (cb, err) => onSnapshot(r, {includeMetadataChanges:true}, s => cb(wrapDoc(s)), err), set: d => setDoc(r, d)}; },
+    collection(c){ const cr = collection(fs, ...base, c); return {
+      onSnapshot: (cb, err) => onSnapshot(cr, {includeMetadataChanges:true}, s => cb({docs: s.docs.map(d => ({id: d.id, data: () => d.data()})), metadata: {fromCache: s.metadata.fromCache}}), err),
+      doc: id => { const r = doc(cr, id); return {set: d => setDoc(r, d), delete: () => deleteDoc(r)}; }}; }
+  };
+}
+const lock = document.getElementById("lock"), root = document.getElementById("app-root");
+let booted = false;
+window.__logout = async () => { try { localStorage.removeItem("nztrip-cache-v1"); } catch(e){} await signOut(auth); location.reload(); };
+onAuthStateChanged(auth, user => {
+  if(user){ lock.hidden = true; root.hidden = false; if(!booted){ booted = true; window.__fbdb = mk(user.uid); window.__boot(); } }
+  else { try { localStorage.removeItem("nztrip-cache-v1"); } catch(e){} root.hidden = true; lock.hidden = false; }
+});
+document.getElementById("lock-form").addEventListener("submit", async e => {
+  e.preventDefault(); const btn = document.getElementById("lock-go"), err = document.getElementById("lock-err");
+  btn.disabled = true; err.textContent = "";
+  try { await setPersistence(auth, browserLocalPersistence); await signInWithEmailAndPassword(auth, document.getElementById("lock-email").value.trim(), document.getElementById("lock-pw").value); }
+  catch(x){ err.textContent = /network/.test(x.code || "") ? "网络连不上，请稍后再试" : /too-many/.test(x.code || "") ? "尝试太多次，请过几分钟再试" : "邮箱或口令不对"; }
+  btn.disabled = false;
+});
+</script></body></html>
