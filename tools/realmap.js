@@ -1,7 +1,7 @@
 /* Web build only: real, zoomable map (Leaflet + street/satellite tiles) replaces the drawn SVG map. */
 let LM = null, LG = null, LMK = {};
 const LMAP_LAYERS = () => ({
-  "街道": L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {maxZoom: 19, subdomains: "abcd", attribution: "© OpenStreetMap © CARTO"}),
+  "街道": L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "© OpenStreetMap"}),
   "卫星": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {maxZoom: 18, attribution: "Imagery © Esri"})
 });
 let LMAP_BASE = "街道";
@@ -14,7 +14,7 @@ function drawMap(resetView){
   }
   if(!LM || LM.getContainer() !== el){
     if(LM){ keep = {c: LM.getCenter(), z: LM.getZoom()}; LM.remove(); }
-    LM = L.map(el, {zoomControl: true, attributionControl: true, tap: false});
+    LM = L.map(el, {zoomControl: true, attributionControl: true, tap: false}); LM.attributionControl.setPrefix(false);
     const layers = LMAP_LAYERS(); layers[LMAP_BASE].addTo(LM);
     L.control.layers(layers, null, {position: "topright", collapsed: false}).addTo(LM);
     LM.on("baselayerchange", e => { LMAP_BASE = e.name; });
