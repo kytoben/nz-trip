@@ -536,6 +536,43 @@ nav.bottom .navbtn[aria-current="page"] svg{animation:pop .35s var(--ease)}
 .deco.compass{right:1vw;top:6%;width:min(20vw,250px);opacity:.75}
 @media (max-width:820px){.deco.compass{width:50vw;right:-10vw;top:3%;opacity:.5}}
 @media (prefers-reduced-motion:reduce){.flight .dash,.pulse{animation:none}}
+
+@media (max-width:820px){
+  .glass-grid:has(.leg){grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px}
+  .glass-grid:has(.leg)>.leg{grid-column:auto!important;padding:12px 12px;border-radius:16px}
+  .glass.leg .gl-n{font-size:18px}
+  .glass.leg .gl-n small{font-size:12px}
+  .glass.leg .gl-k{font-size:12px}
+  .glass.leg .gl-s{margin-top:3px;font-size:11px}
+}
+@media (max-width:520px){
+  .pkadd{flex-wrap:wrap}
+  .pkadd input{flex:1 1 100%;height:44px}
+  .pkadd select{flex:1 1 auto;height:44px}
+  .pkadd .btn{height:44px;padding:0 20px}
+}
+/* v10 design pass */
+.stage-top{margin-bottom:32px}
+.datetile{width:58px;flex:none;align-self:flex-start;text-align:center;border-radius:16px;padding:8px 0 7px;background:color-mix(in srgb,var(--dc) 11%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--dc) 22%,transparent)}
+.datetile b{display:block;font-family:var(--display);font-size:26px;line-height:1.05;font-weight:700;letter-spacing:-.04em;color:var(--dc);font-variant-numeric:tabular-nums}
+.datetile span{display:block;margin-top:2px;font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap}
+.daymeta{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.daymeta i{width:7px;height:7px;border-radius:50%;flex:none}
+.daytheme.h{color:inherit;max-width:100%}
+.daytheme.h h3{font-size:21px;line-height:1.25;letter-spacing:-.025em}
+.daytheme.h:hover h3{color:var(--link)}
+.dayhead h3 + .daytheme.add{margin-top:2px}
+.dayhead{align-items:center}
+.sec-head h2{letter-spacing:-.035em}
+.num,.gl-n,.cd-num{font-variant-numeric:tabular-nums}
+@media (max-width:820px){
+  .stage-top{margin-bottom:20px}
+  .ringtile{flex-direction:row;align-items:flex-start;display:block;position:relative}
+  .ringtile .ring{position:absolute;top:14px;right:14px;width:34px;height:34px}
+  .datetile{width:52px;border-radius:14px}
+  .datetile b{font-size:23px}
+  .daytheme.h h3{font-size:18px}
+}
 </style></head><body style="margin:0"><div id="app-root" hidden>
 
 <div class="app">
@@ -739,7 +776,7 @@ function ringSVG(frac, size){ const C = 163.36; return `<svg class="ring" viewBo
 function stageHTML(o){
   return `<section class="stage th-${o.theme || view} ${o.hero ? "" : "compact"} ${o.cls || ""}" id="stage"><div class="sky" aria-hidden="true"><i class="aur a1"></i><i class="aur a2"></i><i class="aur a3"></i><div class="stars"></div>${(STAGE_ART[o.theme || view] || STAGE_ART.trip).deco}</div>${(STAGE_ART[o.theme || view] || STAGE_ART.trip).land}
     <div class="stage-in" id="stage-in">
-      <div class="stage-top"><span class="kicker">${o.kicker}</span><div class="row">${o.actions || ""}<button class="iconbtn glassicon" data-act="settings" aria-label="设置与备份">${I.gear}</button></div></div>
+      <div class="stage-top"><span></span><div class="row">${o.actions || ""}<button class="iconbtn glassicon" data-act="settings" aria-label="设置与备份">${I.gear}</button></div></div>
       <h1 class="mega">${o.title}</h1>
       ${o.lede ? `<p class="lede">${o.lede}</p>` : ""}
       ${o.side ? `<div class="stage-split"><div>${o.big || ""}</div>${o.side}</div>` : (o.big || "")}
@@ -779,7 +816,7 @@ function viewTrip(){
         <div class="glass"><div class="gl-k">行程</div><div class="gl-n num"><span data-count="${days.length}">${days.length}</span><small>天</small></div><div class="gl-s">${S.places.length} 个景点 · ${S.bookings.length} 项预订</div></div>
         <a class="glass ringtile" href="#budget">${ringSVG(pct)}<div><div class="gl-k">已花费</div><div class="gl-n num">${money(spentSGD,"SGD").replace(/\.\d+$/,"")}</div><div class="gl-s">${budgetSGD ? `预算的 ${Math.round(pct*100)}%` : "还没设预算"}</div></div></a>`});
   html += exampleBanner();
-  html += `<div class="sec-head"><h2 class="grad">每日行程</h2><a href="#map" data-go="map" class="more">在地图上看 ›</a></div>`;
+  html += `<div class="sec-head"><h2>每日行程</h2><a href="#map" data-go="map" class="more">在地图上看 ›</a></div>`;
 
   days.forEach(d => {
     const items = [];
@@ -794,11 +831,11 @@ function viewTrip(){
     const pts = sortPlaces(S.places.filter(p => Number(p.day) === d.n && coordsOf(p)));
     const routeLink = pts.length ? dayRouteUrl(pts, night) : "";
     const theme = (S.meta.dayTitles || {})[d.n];
-    html += `<section class="day" id="day-${d.n}"><div class="dayhead"><div class="daynum" style="background:${dayColor(d.n)}">${d.n}</div><div class="grow"><h3>第 ${d.n} 天${d.date ? ` · ${fmtDate(d.date)} ${WD[d.date.getDay()]}` : ""}</h3><button class="daytheme ${theme ? "" : "add"}" data-act="day-theme" data-day="${d.n}">${theme ? esc(theme) : "＋ 写这天的主题"}</button></div><button class="btn ghost sm" data-act="map-day" data-day="${d.n}">${I.map}<span class="mobile-hide">看地图</span></button></div>
+    html += `<section class="day" id="day-${d.n}"><div class="dayhead"><div class="datetile" style="--dc:${dayColor(d.n)}">${d.date ? `<b class="num">${d.date.getDate()}</b><span>${d.date.getMonth()+1}月 ${WD[d.date.getDay()]}</span>` : `<b class="num">${d.n}</b><span>第 ${d.n} 天</span>`}</div><div class="grow"><div class="daymeta">第 ${d.n} 天</div>${theme ? `<button class="daytheme h" data-act="day-theme" data-day="${d.n}" title="改这天的主题"><h3>${esc(theme)}</h3></button>` : `<h3>${d.date ? `${fmtDate(d.date)} ${WD[d.date.getDay()]}` : `第 ${d.n} 天`}</h3><button class="daytheme add" data-act="day-theme" data-day="${d.n}">＋ 写这天的主题</button>`}</div><button class="btn ghost sm" data-act="map-day" data-day="${d.n}">${I.map}<span class="mobile-hide">看地图</span></button></div>
       <ul class="items">${items.length ? items.map(x => x.html).join("") : `<li class="it static"><div class="t"></div><div class="node empty-node"></div><div class="main"><div class="empty">这天还空着，点下面的“景点”添加</div></div><div></div></li>`}${night ? nightItem(night) : ""}</ul>
       <div class="dayfoot"><button class="btn sm" data-act="add-place" data-day="${d.n}">${I.plus}景点</button>${routeLink ? `<a class="btn sm" href="${routeLink}" target="_blank" rel="noopener">${I.nav}整天路线导航</a>` : ""}</div></section>`;
   });
-  html += `<section class="day"><div class="dayhead"><div class="daynum" style="background:${dayColor(0)}">?</div><div class="grow"><h3>想去，还没排进哪一天</h3><div class="sub">点景点，在“哪一天”里选一天就能排进去</div></div></div><ul class="items">${unplanned.length ? unplanned.map(p => placeItem(p)).join("") : `<li class="it static"><div class="t"></div><div class="node empty-node"></div><div class="main"><div class="empty">把还没决定的景点放这里</div></div><div></div></li>`}</ul><div class="dayfoot"><button class="btn sm" data-act="add-place" data-day="0">${I.plus}景点</button></div></section>`;
+  html += `<section class="day"><div class="dayhead"><div class="datetile" style="--dc:${dayColor(0)}"><b>?</b><span>待定</span></div><div class="grow"><h3>想去，还没排进哪一天</h3><div class="sub">点景点，在“哪一天”里选一天就能排进去</div></div></div><ul class="items">${unplanned.length ? unplanned.map(p => placeItem(p)).join("") : `<li class="it static"><div class="t"></div><div class="node empty-node"></div><div class="main"><div class="empty">把还没决定的景点放这里</div></div><div></div></li>`}</ul><div class="dayfoot"><button class="btn sm" data-act="add-place" data-day="0">${I.plus}景点</button></div></section>`;
   return html;
 }
 function dayRouteUrl(pts, night){
@@ -876,7 +913,7 @@ let mapDay = "all", mapSel = null, vb = null;
 function mapPoints(){
   const pts = [];
   S.places.forEach(p => { const c = coordsOf(p); if(c && (mapDay === "all" || Number(p.day) === Number(mapDay))) pts.push({kind:"place", o:p, c, day:Number(p.day)||0}); });
-  {
+  if(mapDay === "all" || mapDay === "hotel" || true){
     S.bookings.forEach(b => {
       const c = coordsOf(b); if(!c) return;
       const d = b.start ? dayOfDate(b.start) : 0;
@@ -1061,8 +1098,7 @@ function viewPacking(){
   let html = stageHTML({kicker:"PACKING · 出发前清单", title:"打包清单", lede:"勾一件少一件，出发前全部变蓝就齐了。",
     actions: done ? `<button class="btn glassbtn sm" data-act="reset-pack">全部取消勾选</button>` : "",
     big: bigNum(Math.round(frac*100) + "%", `已打包 ${done} / ${S.packing.length}`, Math.round(frac*100), "pct"),
-    side: `<div class="donutwrap">${ringSVG(frac, 0).replace('class="ring"', 'class="ring big"')}<div class="donut-c"><div class="gl-k">还差</div><div class="donut-n num">${S.packing.length - done}</div><div class="gl-s">件</div></div></div>`,
-    tiles: Object.entries(groups).map(([g, list]) => { const d = list.filter(x => x.checked).length; return `<div class="glass leg"><div class="gl-k">${esc(g)}</div><div class="gl-n num sm">${d}<small>/ ${list.length}</small></div><div class="gbar"><i style="width:${(d/list.length*100).toFixed(0)}%"></i></div></div>`; }).join(""), tilesN:Math.min(5, Object.keys(groups).length || 1)});
+        tiles: Object.entries(groups).map(([g, list]) => { const d = list.filter(x => x.checked).length; return `<div class="glass leg"><div class="gl-k">${esc(g)}</div><div class="gl-n num sm">${d}<small>/ ${list.length}</small></div><div class="gbar"><i style="width:${(d/list.length*100).toFixed(0)}%"></i></div></div>`; }).join(""), tilesN:Math.min(5, Object.keys(groups).length || 1)});
   html += `<form class="card pkadd" id="pkform"><input id="pk-text" placeholder="加一件东西" aria-label="物品"><select id="pk-group" aria-label="分类">${[...new Set(["证件","衣物","电子","洗漱药品","自驾","其他", ...Object.keys(groups)])].map(g => `<option>${esc(g)}</option>`).join("")}</select><button class="btn primary" type="submit">${I.plus}添加</button></form>`;
   if(!S.packing.length) return html + `<div class="card empty">清单是空的。在上面添加第一件东西。</div>`;
   html += `<div class="pk-groups">${Object.entries(groups).map(([g, list]) => `<div class="card pk"><div class="row" style="justify-content:space-between"><h3>${esc(g)}</h3><span class="sub num">${list.filter(x=>x.checked).length}/${list.length}</span></div>${list.sort((a,b) => (a.order||0)-(b.order||0)).map(p => `<label class="${p.checked?"on":""}"><input type="checkbox" data-pk="${p.id}" ${p.checked?"checked":""}><span>${esc(p.text)}</span><button class="iconbtn x" type="button" title="删除" aria-label="删除 ${esc(p.text)}" data-act="del-pack" data-id="${p.id}" style="width:28px;height:28px">×</button></label>`).join("")}</div>`).join("")}</div>`;
